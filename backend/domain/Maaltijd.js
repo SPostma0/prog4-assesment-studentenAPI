@@ -25,12 +25,12 @@ module.exports = class Maaltijd {
     //     console.log(ex.toString());
     // }
 
-    this.Naam = Naam.trim;
-    this.Beschrijving = Beschrijving.trim;
-    this.Ingredienten = Ingredienten.trim;
-    this.Allergie = Allergie.trim;
-    this.Prijs = Prijs.trim;
-    this.UserID = UserID.trim;
-    this.StudentenhuisID = StudentenhuisID.trim;
+    this.Naam = Naam.trim();
+    this.Beschrijving = Beschrijving.trim();
+    this.Ingredienten = Ingredienten.trim();
+    this.Allergie = Allergie.trim();
+    this.Prijs = Prijs.trim();
+    this.UserID = UserID.trim();
+    this.StudentenhuisID = StudentenhuisID.trim();
 
 }}

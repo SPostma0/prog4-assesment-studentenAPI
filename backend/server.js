@@ -68,7 +68,6 @@ app.use('*', function (req, res, next){
     res.json({ message: 'Nothing here' });
     res.status(404);
     res.end();
-    Next();
 })
 
 
