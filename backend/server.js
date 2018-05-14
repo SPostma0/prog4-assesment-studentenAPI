@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 /////////////////////////////
 var RegisterRouter = require('./Routes/PublicRoutes/Register');
 var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
+var RegisterMeal = require('./Routes/PublicRoutes/RegisterMeal');
 var express    = require("express");
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
@@ -55,6 +56,7 @@ app.use('*', function (req, res, next){
 
 router.post('/register', RegisterRouter.register);
 router.post('/RegisterHouse', RegisterHouse.registerhouse);
+router.post('/RegisterMeal', RegisterMeal.registermeal);
 
 
 app.use('/api', router);
