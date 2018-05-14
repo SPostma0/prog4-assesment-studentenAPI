@@ -22,9 +22,7 @@ class DB {
                 console.log("Constructor//DB FAILURE");
             }
             });
-
     };
-
     end(){
         this.connection.end();
     }
