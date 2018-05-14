@@ -1,6 +1,12 @@
 module.exports = class Maaltijd {
-    constructor(Naam, Omschrijving, Ingredienten, Allergie, Prijs, UserID, StudentenhuisID);
 
+
+
+    constructor(Naam, Omschrijving, Ingredienten, Allergie, Prijs, UserID, StudentenhuisID){
+
+    const assert = require('assert')
+    const ApiError = require('./ApiError')
+    
     try{
         assert(typeof (Naam) === 'string', 'Naam must be a string');
         assert(typeof (Omschrijving) === 'string', 'Omschrijving must be a string');
@@ -26,4 +32,4 @@ module.exports = class Maaltijd {
     this.UserID = UserID.trim;
     this.StudentenhuisID = StudentenhuisID.trim;
 
-}
+}}
