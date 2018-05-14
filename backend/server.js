@@ -6,16 +6,16 @@
 const LISTEN_PORT = 3000
 ////////
 //////// MYSQL HOST
-const MYSQL_HOST = "localhost";
+const MYSQL_HOST = "colt.softether.net";
 ////////
 //////// MYSQL USER
-const MYSQL_USER = "user";
+const MYSQL_USER = "studentenhuis_user";
 ////////
 //////// MYSQL PASSWORD
-const MYSQL_PASSWORD = "";
+const MYSQL_PASSWORD = "kommaarmetjerainbowtable";
 ////////
 //////// MYSQL DB NAME
-const MYSQL_DB_NAME = "node"
+const MYSQL_DB_NAME = "studentenhuis"
 ////////
 ////////
 ////////
@@ -26,7 +26,10 @@ const MYSQL_DB_NAME = "node"
 
 
 var express    = require("express");
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 var bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 
