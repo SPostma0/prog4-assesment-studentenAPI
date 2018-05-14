@@ -16,13 +16,15 @@
         "Wachtwoord": user.Wachtwoord 
     }
 
-    console.log("Got user from body: " + user.toString());
+
+    console.log("Got user from body: " + JSON.stringify(newUser));
+
 
     ////Fire query
     connection.connection.query('INSERT INTO user SET ?', newUser, function (error, results, fields) {
 
     if (error) {
-      console.log("error ocurred",error);
+      console.log("error ocurred in register");
       res.send({
         "code":400,
         "failed":"error ocurred"

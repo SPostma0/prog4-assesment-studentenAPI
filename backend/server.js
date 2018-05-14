@@ -9,15 +9,31 @@ const PORT = process.env.PORT || 3000;
 /////////////////////////////
 /////////////REQUIRE/////////
 /////////////////////////////
+
 var RegisterRouter = require('./Routes/PublicRoutes/Register');
 var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
 var RegisterMeal = require('./Routes/PublicRoutes/RegisterMeal');
+
+
+
+////MODULES
+
 var express    = require("express");
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
+
 var Connection = require('./DB');
 
 
+////ROUTERS
+var RegisterRouter = require('./Routes/PublicRoutes/Register');
+var LoginRouter = require('./Routes/PublicRoutes/Login');
+
+
+
+/////////////////////////////
+////////////APP INIT/////////
+/////////////////////////////
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -57,6 +73,7 @@ app.use('*', function (req, res, next){
 router.post('/register', RegisterRouter.register);
 router.post('/RegisterHouse', RegisterHouse.registerhouse);
 router.post('/RegisterMeal', RegisterMeal.registermeal);
+router.post('/login', LoginRouter.login)
 
 
 app.use('/api', router);
