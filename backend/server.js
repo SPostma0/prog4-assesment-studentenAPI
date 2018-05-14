@@ -26,10 +26,6 @@ const MYSQL_DB_NAME = "studentenhuis"
 
 
 var express    = require("express");
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 var bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 
