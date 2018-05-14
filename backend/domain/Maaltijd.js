@@ -5,7 +5,10 @@ module.exports = class Maaltijd {
     constructor(Naam, Beschrijving, Ingredienten, Allergie, Prijs, UserID, StudentenhuisID){
 
     const assert = require('assert')
+
+    //  const ApiError = require('./ApiError')
     // const ApiError = require('./ApiError')
+
     
     // try{
     //     assert(typeof (Naam) === 'string', 'Naam must be a string');
@@ -20,10 +23,16 @@ module.exports = class Maaltijd {
     //     assert(Ingredienten.   length > 1, 'A dish needs atleast 2 ingredients');
     //     assert(Prijs > 0, 'Price has to be above 0')
 
+
+   // }catch(ex){
+     //   throw(new ApiError(ex.toString(), 422))
+   // }
+
     // }catch(ex){
     //     // throw(new ApiError(ex.toString(), 422))
     //     console.log(ex.toString());
     // }
+
 
     this.Naam = Naam.trim();
     this.Beschrijving = Beschrijving.trim();

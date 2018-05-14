@@ -10,25 +10,23 @@ const PORT = process.env.PORT || 3000;
 /////////////REQUIRE/////////
 /////////////////////////////
 
-var RegisterRouter = require('./Routes/PublicRoutes/Register');
-var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
-var RegisterMeal = require('./Routes/PublicRoutes/RegisterMeal');
-
-
 
 ////MODULES
-
 var express    = require("express");
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
 
 var Connection = require('./DB');
-
+var Security = require('./Security')
+var jwt = require('jsonwebtoken');
 
 ////ROUTERS
 var RegisterRouter = require('./Routes/PublicRoutes/Register');
 var LoginRouter = require('./Routes/PublicRoutes/Login');
 
+
+var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
+var RegisterMeal = require('./Routes/PublicRoutes/RegisterMeal');
 
 
 /////////////////////////////
@@ -68,13 +66,25 @@ app.use('*', function (req, res, next){
 })
 
 
-////////ROUTE CONNECTIONS//////
 
+
+////////SECURITY///////////////
+app.use('/api/protected/*', ensureToken, (req, res, next) =>{
+    jwt.verify(req.token, Security.secret, function(err, data) {
+      if (err) {
+        res.sendStatus(403);
+      } else {
+        next();
+        ;      }
+    });
+  })
+  
+////////ROUTE CONNECTIONS//////
 router.post('/register', RegisterRouter.register);
-router.post('/RegisterHouse', RegisterHouse.registerhouse);
-router.post('/RegisterMeal', RegisterMeal.registermeal);
 router.post('/login', LoginRouter.login)
 
+router.post('/protected/RegisterHouse', RegisterHouse.registerhouse);
+router.post('/protected/RegisterMeal', RegisterMeal.registermeal);
 
 app.use('/api', router);
 
@@ -97,3 +107,16 @@ app.listen(PORT, () => {
 
 
 
+
+function ensureToken(req, res, next) {
+
+    const bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader !== 'undefined') {
+      const bearer = bearerHeader.split(" ");
+      const bearerToken = bearer[1];
+      req.token = bearerToken;
+      next();
+    } else {
+      res.sendStatus(403);
+    }
+  }
