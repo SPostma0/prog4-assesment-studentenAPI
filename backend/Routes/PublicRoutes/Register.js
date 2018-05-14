@@ -16,7 +16,7 @@
         "Wachtwoord": user.Wachtwoord 
     }
 
-    console.log("Got user from body: " + user.toString());
+    console.log("Got user from body: " + JSON.stringify(user));
 
     ////Fire query
     connection.connection.query('INSERT INTO user SET ?', newUser, function (error, results, fields) {
