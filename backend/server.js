@@ -25,8 +25,8 @@ var RegisterRouter = require('./Routes/PublicRoutes/Register');
 var LoginRouter = require('./Routes/PublicRoutes/Login');
 
 
-var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
-var RegisterMeal = require('./Routes/PublicRoutes/RegisterMeal');
+var Studenthuis = require('./Routes/SecuredRoutes/Studenthuis');
+var Maaltijd = require('./Routes/SecuredRoutes/Maaltijd');
 
 
 /////////////////////////////
@@ -69,7 +69,7 @@ app.use('*', function (req, res, next){
 
 
 ////////SECURITY///////////////
-app.use('/api/protected/*', ensureToken, (req, res, next) =>{
+app.use('/api/protected/*', Security.ensureToken, (req, res, next) =>{
     jwt.verify(req.token, Security.secret, function(err, data) {
       if (err) {
         res.sendStatus(403);
@@ -80,11 +80,17 @@ app.use('/api/protected/*', ensureToken, (req, res, next) =>{
   })
   
 ////////ROUTE CONNECTIONS//////
-router.post('/register', RegisterRouter.register);
-router.post('/login', LoginRouter.login)
+router.post('/public/register', RegisterRouter.register);
+router.post('/public/login', LoginRouter.login)
 
-router.post('/protected/RegisterHouse', RegisterHouse.registerhouse);
-router.post('/protected/RegisterMeal', RegisterMeal.registermeal);
+router.post('/protected/studentenhuis', Studenthuis.registerhouse);
+router.get('/protected/studentenhuis', Studenthuis.getHouses);
+router.get('/protected/studentenhuis/*/', Studenthuis.getSpecificHouse);
+router.put('/protected/studentenhuis/*/', Studenthuis.putHouse);
+router.delete('/protected/studentenhuis/*/', Studenthuis.deleteHouse);
+
+
+router.post('/protected/RegisterMeal', Maaltijd.registermeal);
 
 app.use('/api', router);
 
@@ -107,16 +113,3 @@ app.listen(PORT, () => {
 
 
 
-
-function ensureToken(req, res, next) {
-
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== 'undefined') {
-      const bearer = bearerHeader.split(" ");
-      const bearerToken = bearer[1];
-      req.token = bearerToken;
-      next();
-    } else {
-      res.sendStatus(403);
-    }
-  }

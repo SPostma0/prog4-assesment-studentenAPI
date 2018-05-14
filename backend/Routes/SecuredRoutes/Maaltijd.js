@@ -33,7 +33,7 @@
 
       connection.connection.end();
     }else{
-      console.log('The result is: ', results);
+
       res.send({
         "code":200,
         "success":"meal registered sucessfully"
