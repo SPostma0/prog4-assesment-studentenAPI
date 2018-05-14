@@ -16,7 +16,8 @@ class DB {
         })
 
         this.connection.connect(function(err){
-            if(!err) {                
+
+            if(!err) {            
             } else {
                 console.log("Constructor//DB FAILURE");
             }
@@ -25,7 +26,6 @@ class DB {
     };
 
     end(){
-        console.log("Connection closed");
         this.connection.end();
     }
 

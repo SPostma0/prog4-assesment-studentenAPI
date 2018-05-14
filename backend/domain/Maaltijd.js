@@ -5,7 +5,7 @@ module.exports = class Maaltijd {
     constructor(Naam, Omschrijving, Ingredienten, Allergie, Prijs, UserID, StudentenhuisID){
 
     const assert = require('assert')
-    const ApiError = require('./ApiError')
+  //  const ApiError = require('./ApiError')
     
     try{
         assert(typeof (Naam) === 'string', 'Naam must be a string');
@@ -21,7 +21,7 @@ module.exports = class Maaltijd {
         assert(Prijs > 0, 'Price has to be above 0')
 
     }catch(ex){
-        throw(new ApiError(ex.toString(), 422))
+     //   throw(new ApiError(ex.toString(), 422))
     }
 
     this.Nama = Naam.trim;

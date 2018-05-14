@@ -3,6 +3,8 @@ exports.login = function(req,res){
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
+    var jwt = require('jsonwebtoken');
+    var Security = require('./../../Security');
 
     ////Getting values from body;
 
@@ -18,6 +20,9 @@ exports.login = function(req,res){
     ////Fire query
     connection.connection.query('SELECT * FROM user WHERE Email = "' + User.Email + '" AND Wachtwoord = "' + User.Wachtwoord + '";',  function (error, results, fields) {
 
+
+
+      /////////IN GEVAL DB ERROR
     if (error) {
       console.log("/LOGIN/ Error occured" + error);
       res.send({
@@ -25,16 +30,30 @@ exports.login = function(req,res){
         "failed":"error ocurred"
       })
       res.end();
-
       connection.connection.end();
     }else{
 
+
+              //////////////ALS LOGIN SUCCES
         if(results.length === 1){
             console.log("Login succesfull")
-            res.send({message:"Goeie shit"})
+
+            user = {
+              id: results[0].ID
+            };
+          
+            const token = jwt.sign({user}, Security.secret);
+
+            var returnToken = {
+              "token" : token
+            }
+            res.json(returnToken);
+
+
+            //////////ALS LOGIN GEEN SUCCES
         }else{
             console.log("Login Not Succesfull")
-            res.send({message:"Kutzooi"})
+            res.send({message:"invalid"})
         }
 
         res.end()

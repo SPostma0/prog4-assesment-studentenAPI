@@ -62,6 +62,12 @@ app.use('*', function (req, res, next){
 })
 
 
+
+////////SECURITY///////////////
+app.get('api/protected', ensureToken, function(req, res)){
+    
+}
+
 ////////ROUTE CONNECTIONS//////
 
 router.post('/register', RegisterRouter.register);
