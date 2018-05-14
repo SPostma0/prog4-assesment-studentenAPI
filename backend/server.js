@@ -10,8 +10,14 @@ const PORT = process.env.PORT || 3000;
 /////////////REQUIRE/////////
 /////////////////////////////
 
+var RegisterRouter = require('./Routes/PublicRoutes/Register');
+var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
+var RegisterMeal = require('./Routes/PublicRoutes/RegisterMeal');
+
+
 
 ////MODULES
+
 var express    = require("express");
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
@@ -65,7 +71,10 @@ app.use('*', function (req, res, next){
 ////////ROUTE CONNECTIONS//////
 
 router.post('/register', RegisterRouter.register);
+router.post('/RegisterHouse', RegisterHouse.registerhouse);
+router.post('/RegisterMeal', RegisterMeal.registermeal);
 router.post('/login', LoginRouter.login)
+
 
 app.use('/api', router);
 
@@ -76,7 +85,6 @@ app.use('*', function (req, res, next){
     res.json({ message: 'Nothing here' });
     res.status(404);
     res.end();
-    Next();
 })
 
 
