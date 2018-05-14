@@ -26,8 +26,6 @@ const MYSQL_DB_NAME = "studentenhuis"
 
 
 var express    = require("express");
-var login = require('./routes/loginroutes');
-var data = require('./routes/dataroutes')
 var bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 
