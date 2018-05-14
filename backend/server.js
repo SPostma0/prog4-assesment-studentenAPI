@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 /////////////REQUIRE/////////
 /////////////////////////////
 var RegisterRouter = require('./Routes/PublicRoutes/Register');
+var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
 var express    = require("express");
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
@@ -53,6 +54,7 @@ app.use('*', function (req, res, next){
 ////////ROUTE CONNECTIONS//////
 
 router.post('/register', RegisterRouter.register);
+router.post('/RegisterHouse', RegisterHouse.registerhouse);
 
 
 app.use('/api', router);
