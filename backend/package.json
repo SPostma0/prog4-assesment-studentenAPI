@@ -1,0 +1,38 @@
+{
+  "name": "prog4-assesment",
+  "version": "1.0.0",
+  "description": "Web based API voor het PROG 4 Assesment",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SPostma0/prog4-assesment-studentenAPI.git"
+  },
+  "keywords": [
+    "API",
+    "NODE",
+    "AVANS",
+    "SANDER",
+    "POSTMA",
+    "DJIM",
+    "OOMES",
+    "JS"
+  ],
+  "author": "Sander Postma, Djim Oomes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SPostma0/prog4-assesment-studentenAPI/issues"
+  },
+  "homepage": "https://github.com/SPostma0/prog4-assesment-studentenAPI#readme",
+  "dependencies": {
+    "bcrypt": "^2.0.1",
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "mocha": "^5.1.1",
+    "morgan": "^1.9.0",
+    "mysql": "^2.15.0"
+  }
+}
