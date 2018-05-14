@@ -17,12 +17,16 @@ var bodyParser = require('body-parser');
 var mysql      = require('mysql');
 
 var Connection = require('./DB');
-
+var Security = require('./Security')
+var jwt = require('jsonwebtoken');
 
 ////ROUTERS
 var RegisterRouter = require('./Routes/PublicRoutes/Register');
 var LoginRouter = require('./Routes/PublicRoutes/Login');
 
+
+var RegisterHouse = require('./Routes/PublicRoutes/RegisterHouse');
+var RegisterMeal = require('./Routes/PublicRoutes/RegisterMeal');
 
 
 /////////////////////////////
@@ -65,15 +69,13 @@ app.use('*', function (req, res, next){
 
 
 ////////SECURITY///////////////
-app.get('/api/protected', ensureToken, (req, res) =>{
-    jwt.verify(req.token, 'secret_key_goes_here', function(err, data) {
+app.use('/api/protected/*', ensureToken, (req, res, next) =>{
+    jwt.verify(req.token, Security.secret, function(err, data) {
       if (err) {
         res.sendStatus(403);
       } else {
-        res.json({
-          description: 'Protected information. Congrats!'
-        });
-      }
+        next();
+        ;      }
     });
   })
   
@@ -81,6 +83,8 @@ app.get('/api/protected', ensureToken, (req, res) =>{
 router.post('/register', RegisterRouter.register);
 router.post('/login', LoginRouter.login)
 
+router.post('/protected/RegisterHouse', RegisterHouse.registerhouse);
+router.post('/protected/RegisterMeal', RegisterMeal.registermeal);
 
 app.use('/api', router);
 
@@ -91,7 +95,6 @@ app.use('*', function (req, res, next){
     res.json({ message: 'Nothing here' });
     res.status(404);
     res.end();
-    Next();
 })
 
 
@@ -106,6 +109,7 @@ app.listen(PORT, () => {
 
 
 function ensureToken(req, res, next) {
+
     const bearerHeader = req.headers["authorization"];
     if (typeof bearerHeader !== 'undefined') {
       const bearer = bearerHeader.split(" ");
