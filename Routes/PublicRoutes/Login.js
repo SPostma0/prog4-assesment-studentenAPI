@@ -9,15 +9,21 @@ exports.login = function(req,res){
     var connection = new db;
     var jwt = require('jsonwebtoken');
     var Security = require('./../../Security');
+    var User = require('./../../domain/User');
+    var bcrypt = require('bcrypt');
 
 
 
 /////////////////////////////
 ////////////SETUP USER///////
 /////////////////////////////
+    
+
+
+
     var User ={
         "Email": req.body.Email,
-        "Wachtwoord": req.body.Wachtwoord 
+        "Wachtwoord": req.body.Wachtwoord
     }
     console.log("/LOGIN/Got user from body: " + JSON.stringify(User));
 
@@ -25,7 +31,8 @@ exports.login = function(req,res){
 /////////////////////////////
 //////FIRE QUERY TO DATA/////
 /////////////////////////////
-    connection.connection.query('SELECT * FROM user WHERE Email = "' + User.Email + '" AND Wachtwoord = "' + User.Wachtwoord + '";',  function (error, results, fields) {
+
+    connection.connection.query('SELECT * FROM user WHERE Email = "' + User.Email + '";',  function (error, results, fields) {
 
 /////////////////////////////
 ////////////IF DB ERROR//////
@@ -43,7 +50,8 @@ exports.login = function(req,res){
 /////////////////////////////
 ////////IF LOGIN SUCCES//////
 /////////////////////////////
-        if(results.length === 1){
+
+        if(results.length === 1 && bcrypt.compareSync(User.Wachtwoord, results[0].Wachtwoord)){
                 console.log("Login succesfull")
 
                 user = {id: results[0].ID};
