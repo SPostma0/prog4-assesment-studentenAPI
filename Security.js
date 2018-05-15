@@ -1,4 +1,12 @@
+
+/////////////////////////////
+////////////SETUP SECRET/////
+/////////////////////////////
 exports.secret = 'rainbowinthesky';
+
+/////////////////////////////
+////////////SETUP HEADER/////
+/////////////////////////////
 
 exports.ensureToken = function ensureToken(req, res, next) {
 
@@ -10,14 +18,20 @@ exports.ensureToken = function ensureToken(req, res, next) {
       next();
     } else {
       res.sendStatus(401);
+      res.send()
     }
   }
 
 
   exports.decodeToken =  function url_base64_decode(req, res, next) {
-
+/////////////////////////////////
+///DEPENDANCY////////////////////
+///////////////////////////////// 
     var atob = require('atob');
 
+///////////////////////////////////////////
+///DECODE FROM STACKOVERFLOW///////////////
+///////////////////////////////////////////     
     const bearerHeader = req.headers["authorization"];
     if (typeof bearerHeader !== 'undefined') {
       const bearer = bearerHeader.split(" ");
@@ -42,14 +56,17 @@ exports.ensureToken = function ensureToken(req, res, next) {
         throw 'Illegal base64url string!';
     }
     var result = atob(output); 
-    
     try{
      return decodeURIComponent(escape(result));
     } catch (err) {
      // console.log(result);
       
-     tokenArray =  result.split('{');
 
+////////////////////////////////////////////////////////
+///ON MALFORMED, MANUALLY DEASEMBLE TOKEN///////////////
+////////////////////////////////////////////////////////
+
+     tokenArray =  result.split('{');
      phase1 = tokenArray[3];
      phase2 = '{' + phase1.split('}')[0] + '}' 
       return phase2;

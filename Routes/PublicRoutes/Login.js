@@ -1,63 +1,78 @@
 exports.login = function(req,res){
 
+
+/////////////////////////////
+////////////SETUP DEPEND/////
+/////////////////////////////   
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
     var jwt = require('jsonwebtoken');
     var Security = require('./../../Security');
 
-    ////Getting values from body;
 
-    ////Creating set from User
+
+/////////////////////////////
+////////////SETUP USER///////
+/////////////////////////////
     var User ={
-
         "Email": req.body.Email,
         "Wachtwoord": req.body.Wachtwoord 
     }
-
     console.log("/LOGIN/Got user from body: " + JSON.stringify(User));
 
-    ////Fire query
+
+/////////////////////////////
+//////FIRE QUERY TO DATA/////
+/////////////////////////////
     connection.connection.query('SELECT * FROM user WHERE Email = "' + User.Email + '" AND Wachtwoord = "' + User.Wachtwoord + '";',  function (error, results, fields) {
 
-
-
-      /////////IN GEVAL DB ERROR
+/////////////////////////////
+////////////IF DB ERROR//////
+/////////////////////////////
     if (error) {
-      console.log("/LOGIN/ Error occured" + error);
-      res.send({
-        "code":400,
-        "failed":"error ocurred"
-      })
-      res.end();
-      connection.connection.end();
-    }else{
+        console.log("/LOGIN/ Error occured" + error);
+        res.send({
+                    "code":400,
+                    "failed":"error ocurred"})
+        res.end();
+        connection.connection.end();
+        }else{
 
 
-              //////////////ALS LOGIN SUCCES
+/////////////////////////////
+////////IF LOGIN SUCCES//////
+/////////////////////////////
         if(results.length === 1){
-            console.log("Login succesfull")
+                console.log("Login succesfull")
 
-            user = {
-              id: results[0].ID
-            };
-          
-            const token = jwt.sign({user}, Security.secret);
+                user = {id: results[0].ID};
+/////////////////////////////////
+//////SIGN TOKEN WITH USERID/////
+/////////////////////////////////          
+            const token =           jwt.sign({user}     , Security.secret);
 
-            var returnToken = {
-              "token" : token
-            }
-            res.json(returnToken);
+            var returnToken =       { "token" : token}
+
+/////////////////////////////
+////RETURN TOKEN TO CLIENT///
+/////////////////////////////                                   
+res.json(returnToken);
 
 
-            //////////ALS LOGIN GEEN SUCCES
+/////////////////////////////
+////////FALSE LOGIN DETAILS//
+/////////////////////////////
         }else{
             console.log("Login Not Succesfull")
-            res.send({message:"invalid"})
+            res.send({message:"invalid credentials"})
         }
 
-        res.end()
-      connection.end();
-    }
+/////////////////////////////////////
+//KILL CONNECTION TO DB & CLIENT/////
+/////////////////////////////////////       
+    res.end()
+    connection.end();
+        }
     });
   }

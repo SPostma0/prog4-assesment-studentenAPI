@@ -5,13 +5,12 @@
 /////////LISTEN PORT/////////
 const PORT = process.env.PORT || 3000;
 /////////////////////////////
-
 /////////////////////////////
 /////////////REQUIRE/////////
 /////////////////////////////
-
-
-////MODULES
+/////////////////////////////
+////////////MODULES//////////
+/////////////////////////////
 var express    = require("express");
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
@@ -20,11 +19,11 @@ var Connection = require('./DB');
 var Security = require('./Security')
 var jwt = require('jsonwebtoken');
 
-////ROUTERS
+//////////////////////////////
+////////////SETUP ROUTERS/////
+//////////////////////////////
 var RegisterRouter = require('./Routes/PublicRoutes/Register');
 var LoginRouter = require('./Routes/PublicRoutes/Login');
-
-
 var Studenthuis = require('./Routes/SecuredRoutes/Studenthuis');
 var Maaltijd = require('./Routes/SecuredRoutes/Maaltijd');
 var Deelnemer = require('./Routes/SecuredRoutes/Deelnemer');
@@ -49,7 +48,9 @@ conn.end();
 
 
 
-////////////SETUP HEADER////////////
+/////////////////////////////
+////////////SETUP HEADER/////
+/////////////////////////////
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -58,8 +59,9 @@ app.use(function(req, res, next) {
 
 
 
-
-//////////CATCH ALL/////////
+/////////////////////////////
+////////////CATCH ALL////////
+/////////////////////////////
 app.use('*', function (req, res, next){
     console.log('Start endpoint')
 
@@ -69,47 +71,65 @@ app.use('*', function (req, res, next){
 
 
 
-////////SECURITY///////////////
+/////////////////////////////
+//////AWT TOKEN CHECK////////
+/////////////////////////////
 app.use('/api/protected/*', Security.ensureToken, (req, res, next) =>{
     jwt.verify(req.token, Security.secret, function(err, data) {
       if (err) {
         res.sendStatus(403);
-      } else {
-        next();
-        ;      }
-    });
-  })
+            } else {
+                next();
+            }
+        });
+    })
   
-////////ROUTE CONNECTIONS//////
+///////////////////////////////////////////////////
+//////ROUTING CONNECTION TO ENDPOINTS//////////////
+///////////////////////////////////////////////////
+
+/////////////////////////////////
+///PUBLIC ROUTING////////////////
+///////////////////////////////// 
 router.post('/public/register', RegisterRouter.register);
-router.post('/public/login', LoginRouter.login)
+router.post('/public/login',    LoginRouter.login)
 
-
+//////////////////////////////////
+///ROUTER DEELNEMER///////////////
+////////////////////////////////// 
 router.post     ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.registerParticipant);
 router.get      ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.getParticipants)
 router.delete   ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.deletePatricipant)
 
-router.post     ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);
-router.get      ('/protected/studentenhuis/*/maaltijd', Maaltijd.getMeals);
-router.get      ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.getSpecificMeal);
-router.put      ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.putMeal);
-router.delete   ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.deleteMeal);
+/////////////////////////////////
+///ROUTER MAALTIJD///////////////
+///////////////////////////////// 
 
-router.post      ('/protected/studentenhuis', Studenthuis.registerhouse);
-router.get      ('/protected/studentenhuis', Studenthuis.getHouses);
+router.post     ('/protected/studentenhuis/*/maaltijd',     Maaltijd.registermeal);
+router.get      ('/protected/studentenhuis/*/maaltijd',     Maaltijd.getMeals);
+router.get      ('/protected/studentenhuis/*/maaltijd/*/',  Maaltijd.getSpecificMeal);
+router.put      ('/protected/studentenhuis/*/maaltijd/*/',  Maaltijd.putMeal);
+router.delete   ('/protected/studentenhuis/*/maaltijd/*/',  Maaltijd.deleteMeal);
+
+/////////////////////////////////
+///ROUTER STUDENTHUIS///////////////
+///////////////////////////////// 
+
+router.post      ('/protected/studentenhuis',   Studenthuis.registerhouse);
+router.get      ('/protected/studentenhuis',    Studenthuis.getHouses);
 router.get      ('/protected/studentenhuis/*/', Studenthuis.getSpecificHouse);
 router.put      ('/protected/studentenhuis/*/', Studenthuis.putHouse);
 router.delete   ('/protected/studentenhuis/*/', Studenthuis.deleteHouse);
 
-
-
-
-
-
+////////////////////////////////////
+///IF /API USE ROUTER///////////////
+//////////////////////////////////// 
 app.use('/api', router);
 
 
-//////////CATCH FINAL/////////
+//////////////////////////////
+///////FINAL ENDPOINT 404/////
+//////////////////////////////
 app.use('*', function (req, res, next){
     console.log('End endpoint')
     res.json({ message: 'Nothing here' });
@@ -120,7 +140,9 @@ app.use('*', function (req, res, next){
 
 
 
-
+////////////////////////////////
+////////SERVER LISTEN SETUP/////
+////////////////////////////////
 app.listen(PORT, () => {
 	console.log('Listening on port: ' + PORT);
 })
