@@ -83,14 +83,23 @@ app.use('/api/protected/*', Security.ensureToken, (req, res, next) =>{
 router.post('/public/register', RegisterRouter.register);
 router.post('/public/login', LoginRouter.login)
 
-router.post('/protected/studentenhuis', Studenthuis.registerhouse);
-router.get('/protected/studentenhuis', Studenthuis.getHouses);
-router.get('/protected/studentenhuis/*/', Studenthuis.getSpecificHouse);
-router.put('/protected/studentenhuis/*/', Studenthuis.putHouse);
-router.delete('/protected/studentenhuis/*/', Studenthuis.deleteHouse);
+
+router.post   ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);
+router.get    ('/protected/studentenhuis/*/maaltijd', Maaltijd.getMeals);
+router.get    ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.getSpecificMeal);
+router.put    ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.putMeal);
+router.delete ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.deleteMeal);
+
+router.post   ('/protected/studentenhuis', Studenthuis.registerhouse);
+router.get    ('/protected/studentenhuis', Studenthuis.getHouses);
+router.get    ('/protected/studentenhuis/*/', Studenthuis.getSpecificHouse);
+router.put    ('/protected/studentenhuis/*/', Studenthuis.putHouse);
+router.delete ('/protected/studentenhuis/*/', Studenthuis.deleteHouse);
 
 
-router.post('/protected/RegisterMeal', Maaltijd.registermeal);
+
+
+
 
 app.use('/api', router);
 

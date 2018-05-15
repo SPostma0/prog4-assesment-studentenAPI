@@ -1,4 +1,5 @@
 exports.registerhouse= function(req,res){
+    console.log("register house router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
@@ -46,6 +47,7 @@ exports.registerhouse= function(req,res){
 }
 
 exports.getHouses= function(req,res){
+    console.log("get all houses router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
@@ -83,6 +85,7 @@ exports.getHouses= function(req,res){
 
 
 exports.getSpecificHouse= function(req,res){
+    console.log("get specific router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
@@ -133,6 +136,7 @@ exports.getSpecificHouse= function(req,res){
 
 
 exports.putHouse= function(req,res){
+    console.log("put house router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
@@ -182,6 +186,7 @@ exports.putHouse= function(req,res){
 
 
 exports.deleteHouse= function(req,res){
+    console.log("delete house router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
