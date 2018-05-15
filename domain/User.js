@@ -2,6 +2,7 @@
 
     const bcrypt = require('bcrypt');
     const saltRounds = 25;
+    const ApiError = require('./../ApiError');
 
 class User {
 
