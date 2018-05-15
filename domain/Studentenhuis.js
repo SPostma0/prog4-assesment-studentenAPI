@@ -7,6 +7,7 @@ class Studentenhuis {
 
     constructor(Naam, Adres, UserID){
     
+        //todo asserts
     try{
        //assertions here
     }catch(ex){

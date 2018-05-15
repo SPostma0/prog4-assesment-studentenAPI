@@ -3,10 +3,16 @@ exports.registerhouse= function(req,res){
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
-    var Studentenhuis = require('./../../domain/Studentenhuis');
+    var Studentenhuis = require('./../../domain/Studentenhuis'); var Security = require('./../../Security');
+
+
+    ////Decode token and get userid from it
+      decodedToken = Security.decodeToken(req,res);
+ 
+      UserID = JSON.parse(decodedToken).id;
 
     //Get values for the new house
-    var house = new Studentenhuis(req.body.Naam, req.body.Adres, req.body.UserID);
+    var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
 
     if(house.Naam == null || house.Adres == null || house.UserID == null){
         console.log("/registerHouse/ 412. Wrong paramters")
@@ -144,11 +150,22 @@ exports.putHouse= function(req,res){
     var jwt = require('jsonwebtoken');
     var Security = require('./../../Security');
 
+
+   ////Decode token and get userid from it
+     decodedToken = Security.decodeToken(req,res);
+
+     UserID = JSON.parse(decodedToken).id;
+
+
+
+
     //Get values for the new house
     var house = new Studentenhuis(req.body.Naam, req.body.Adres);  
     var pad = req.path.split('/');
     var houseID = pad[3];
 
+
+    ///////Validate Parameterts
     if(house.Naam == null || house.Adres == null){
         console.log("/puthouse/ 412. Wrong paramters")
         res.json({"message" : "Een of meer properties in de request body ontbreken of zijn foutief"})
@@ -156,13 +173,28 @@ exports.putHouse= function(req,res){
         res.end();
         connection.end()
         return;
+    }else{
+        console.log('Paramters correct');
     }
 
+        /////////////////////////Check if house and id match up
+  connection.connection.query('SELECT * FROM studentenhuis WHERE ID = "' + houseID + '" AND UserID = "' + UserID + '";',  function (error, results, fields) {
+    /////////IN GEVAL DB ERROR
+  if (error) {
+    console.log("/PutHouse/ Error occured" + error);
 
-   ///////@TODO VALIDATE TOKEN
-      
-
-
+    res.send({
+      "code":400,
+      "failed":"error ocurred"
+    })
+    res.end();
+    connection.connection.end();
+    return;
+  }else{
+            //////////////Check if amount of rows makes sense
+      if(results.length === 1){
+          
+                /////////////////Update the record
     connection.connection.query('UPDATE studentenhuis SET Naam = "' + house.Naam + '" , Adres = "' + house.Adres + '" WHERE studentenhuis.ID ="' + houseID + '";',  function(error,results,fields){
         if(error){
             console.log("The following error occured: "+ error);
@@ -171,17 +203,31 @@ exports.putHouse= function(req,res){
                 "failed":"error ocurred"
             })
             res.end();
-            connection.connection.end();
+            connection.end();
+            return;
+            
         } else {
-
             res.send({
                 "code":200,
                 "success":"StudentHouse updated sucessfully"
             });
+            connection.end();
             res.end();
-            connection.connection.end();
+            return;          
         }
     });
+          //////////If auth failure
+      }else{
+        connection.end();
+            console.log('/update house/ auth fail');
+          res.send({
+              "message":"Authentication fail"
+          });
+      }
+    return;
+  }
+  });
+
 }
 
 
@@ -194,18 +240,40 @@ exports.deleteHouse= function(req,res){
     var jwt = require('jsonwebtoken');
     var Security = require('./../../Security');
 
-        var pad = req.path.split('/');
-        var houseId = pad[3];
-        console.log('Trying to remove house: ' + houseId);
+
+   ////Decode token and get userid from it
+     decodedToken = Security.decodeToken(req,res);
+
+     UserID = JSON.parse(decodedToken).id;
 
 
-    
-
-   ///////@TODO VALIDATE TOKEN
-      
 
 
-    connection.connection.query('DELETE FROM studentenhuis WHERE ID = ' + houseId + ';',  function(error,results,fields){
+    //Get values for the new house
+    var pad = req.path.split('/');
+    var houseID = pad[3];
+
+
+
+        /////////////////////////Check if house and id match up
+  connection.connection.query('SELECT * FROM studentenhuis WHERE ID = "' + houseID + '" AND UserID = "' + UserID + '";',  function (error, results, fields) {
+    /////////IN GEVAL DB ERROR
+  if (error) {
+    console.log("/deletehouse/ Error occured" + error);
+
+    res.send({
+      "code":400,
+      "failed":"error ocurred"
+    })
+    res.end();
+    connection.connection.end();
+    return;
+  }else{
+            //////////////Check if amount of rows makes sense
+      if(results.length === 1){
+          
+                /////////////////Update the record
+    connection.connection.query('DELETE FROM studentenhuis WHERE ID = "' + houseID + '" AND UserID = "' + UserID + ';',  function(error,results,fields){
         if(error){
             console.log("The following error occured: "+ error);
             res.send({
@@ -213,16 +281,30 @@ exports.deleteHouse= function(req,res){
                 "failed":"error ocurred"
             })
             res.end();
-            connection.connection.end();
+            connection.end();
+            return;
+            
         } else {
-
             res.send({
                 "code":200,
-                "success":"Opperation Succesfull"
+                "success":"StudentHouse updated deleted"
             });
+            connection.end();
             res.end();
-            connection.connection.end();
+            return;          
         }
     });
+          //////////If auth failure
+      }else{
+        connection.end();
+            console.log('/delete house/ auth fail');
+            res.status(409);
+          res.send({
+              "message":"Authentication fail"
+          });
+      }
+    return;
+  }
+  });
 }
 
