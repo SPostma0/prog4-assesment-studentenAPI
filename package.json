@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/SPostma0/prog4-assesment-studentenAPI#readme",
   "dependencies": {
+    "atob": "^2.1.1",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
