@@ -5,11 +5,11 @@
 
 class Studentenhuis {
 
-    constructor(Naam, Adres, UserID){
-    
-        //todo asserts
+    constructor(Naam, Adres, UserID){    
     try{
-       //assertions here
+        assert(typeof (Naam) === 'string', 'Naam must be a string');
+        assert(typeof (Adres) === 'string', 'Adres must be a string');
+        assert(typeof (UserID) === 'number', 'UserID must be a number');
     }catch(ex){
         throw(new ApiError(ex.toString(), 422))
     }

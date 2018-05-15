@@ -2,15 +2,19 @@
 
     const bcrypt = require('bcrypt');
     const saltRounds = 25;
+    const errorHandler = require('./../ApiError');
 
 class User {
 
     constructor(Voornaam, Achternaam, Email, Wachtwoord){
     
     try{
-       //assertions here
+        assert(typeof (Voornaam) === 'string', 'Voornaam must be a string');
+        assert(typeof (Achternaam) === 'string', 'Achternaam must be a string');
+        assert(typeof (Email) === 'string', 'Email must be a string');
+        assert(typeof (Wachtwoord) === 'string', 'Wachtwoord must be a string');
     }catch(ex){
-        throw(new ApiError(ex.toString(), 422))
+        // throw(new ApiError(ex.toString(), 422))
     }
  
       this.Wachtwoord = Wachtwoord;

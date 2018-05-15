@@ -5,6 +5,7 @@ exports.login = function(req,res){
     var connection = new db;
     var jwt = require('jsonwebtoken');
     var Security = require('./../../Security');
+    var mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     ////Getting values from body;
 
@@ -60,4 +61,32 @@ exports.login = function(req,res){
       connection.end();
     }
     });
+
+    function validate (error, rows, field) {
+      if (typeof Voornaam === 'undefined' || typeof Achternaam === 'undefined' || typeof Email === 'undefined' || typeof Wachtwoord === 'undefined') {
+          response.status(412).json({
+              "message": 'One or more parameters are missing',
+              "status": 412,
+              "parameters": request.body
+          })
+      } else if (!regex.test(Email)) {
+          response.status(412).json({
+              "message": "Please enter a valid email",
+              "status": 412,
+              "parameters": response.body
+          })
+      } else if (error) {
+          response.status(500).json({
+              "message": "Something went wrong: " +error,
+              "status": 500,
+              "parameters": request.body
+          })
+      } else {
+          response.status(200).json({
+              "message": "Succesfully registered",
+              "status": 200,
+              "parameters": request.body
+          })
+      }
+  }
   }
