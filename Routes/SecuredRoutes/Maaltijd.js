@@ -1,5 +1,8 @@
 
   exports.registermeal = function(req,res){
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////      
     console.log("register meal router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
@@ -71,6 +74,9 @@
 
   
 exports.getMeals= function(req,res){
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////         
   console.log("get all meals router called");
   var mysql      = require('mysql');
   var db = require('./../../DB');
@@ -110,6 +116,9 @@ exports.getMeals= function(req,res){
 
 
 exports.getSpecificMeal= function(req,res){
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////         
   console.log("get specific meal router called");
   var mysql      = require('mysql');
   var db = require('./../../DB');
@@ -160,6 +169,9 @@ exports.getSpecificMeal= function(req,res){
 }
 
     exports.putMeal= function(req,res){
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////             
     console.log("put meal router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
@@ -250,6 +262,9 @@ exports.getSpecificMeal= function(req,res){
 
 
 exports.deleteMeal= function(req,res){
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////         
   console.log("delete meal router called");
   var mysql      = require('mysql');
   var db = require('./../../DB');

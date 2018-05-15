@@ -1,5 +1,12 @@
+
+/////////////////////////////
+////////////SETUP SECRET/////
+/////////////////////////////
 exports.secret = 'rainbowinthesky';
 
+/////////////////////////////
+////////////SETUP HEADER/////
+/////////////////////////////
 exports.ensureToken = function ensureToken(req, res, next) {
 
     const bearerHeader = req.headers["authorization"];
@@ -10,6 +17,7 @@ exports.ensureToken = function ensureToken(req, res, next) {
       next();
     } else {
       res.sendStatus(401);
+      res.send()
     }
   }
 
