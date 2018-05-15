@@ -8,7 +8,10 @@ class User {
     constructor(Voornaam, Achternaam, Email, Wachtwoord){
     
     try{
-       //assertions here
+        assert(typeof(Voornaam)==='string', 'Voornaam must be a string!');
+        assert(typeof(Achternaam)==='string', 'Achternaam must be a string!');
+        assert(typeof(Email)==='string', 'E-mail must be a string!');
+        assert(typeof(Wachtwoord)==='string', 'Wachtwoord must be a string!');
     }catch(ex){
         throw(new ApiError(ex.toString(), 422))
     }

@@ -28,6 +28,8 @@ var LoginRouter = require('./Routes/PublicRoutes/Login');
 var Studenthuis = require('./Routes/SecuredRoutes/Studenthuis');
 var Maaltijd = require('./Routes/SecuredRoutes/Maaltijd');
 
+const ApiError = require('./ApiError')
+
 
 /////////////////////////////
 ////////////APP INIT/////////
@@ -49,9 +51,18 @@ conn.end();
 
 
 ////////////SETUP HEADER////////////
-app.use(function(req, res, next) {
+app.use(function(err, req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    if(err instanceof require('assert').AssertionError){
+        console.log('The following assertion error occured: '+err);
+        err.code=500;
+    } else if(err instanceof ApiError){
+        console.log('The following API error occcured: '+ err);
+    } else {
+        console.log('Unidentified error occured: '+err);
+    }
+    res.status(err.code).json(err).end();
     next();
 });
 
@@ -81,7 +92,7 @@ app.use('/api/protected/*', Security.ensureToken, (req, res, next) =>{
   
 ////////ROUTE CONNECTIONS//////
 router.post('/public/register', RegisterRouter.register);
-router.post('/public/login', LoginRouter.login)
+router.post('/public/login', LoginRouter.login);
 
 
 router.post   ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);

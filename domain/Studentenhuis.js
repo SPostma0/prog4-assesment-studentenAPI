@@ -8,7 +8,9 @@ class Studentenhuis {
     constructor(Naam, Adres, UserID){
     
     try{
-       //assertions here
+       assert(typeof(Naam)==='string', 'Name must be a string!');
+       assert(typeof(Adres)==='string', 'Adres must be a string!');
+       assert(typeof(Naam)==='number', 'Name must be a string!');
     }catch(ex){
         throw(new ApiError(ex.toString(), 422))
     }
