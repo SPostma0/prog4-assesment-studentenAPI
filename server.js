@@ -84,31 +84,46 @@ app.use('/api/protected/*', Security.ensureToken, (req, res, next) =>{
         });
     })
   
-/////////////////////////////////////////
-//////ROUTING CONNECTION TO ENDPOINTS////
-/////////////////////////////////////////
+///////////////////////////////////////////////////
+//////ROUTING CONNECTION TO ENDPOINTS//////////////
+///////////////////////////////////////////////////
 
+/////////////////////////////////
+///PUBLIC ROUTING////////////////
+///////////////////////////////// 
 router.post('/public/register', RegisterRouter.register);
-router.post('/public/login', LoginRouter.login)
+router.post('/public/login',    LoginRouter.login)
 
-
+//////////////////////////////////
+///ROUTER DEELNEMER///////////////
+////////////////////////////////// 
 router.post     ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.registerParticipant);
 router.get      ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.getParticipants)
 router.delete   ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.deletePatricipant)
 
+/////////////////////////////////
+///ROUTER MAALTIJD///////////////
+///////////////////////////////// 
 
-router.post     ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);
-router.get      ('/protected/studentenhuis/*/maaltijd', Maaltijd.getMeals);
-router.get      ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.getSpecificMeal);
-router.put      ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.putMeal);
-router.delete   ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.deleteMeal);
+router.post     ('/protected/studentenhuis/*/maaltijd',     Maaltijd.registermeal);
+router.get      ('/protected/studentenhuis/*/maaltijd',     Maaltijd.getMeals);
+router.get      ('/protected/studentenhuis/*/maaltijd/*/',  Maaltijd.getSpecificMeal);
+router.put      ('/protected/studentenhuis/*/maaltijd/*/',  Maaltijd.putMeal);
+router.delete   ('/protected/studentenhuis/*/maaltijd/*/',  Maaltijd.deleteMeal);
 
-router.post      ('/protected/studentenhuis', Studenthuis.registerhouse);
-router.get      ('/protected/studentenhuis', Studenthuis.getHouses);
+/////////////////////////////////
+///ROUTER STUDENTHUIS///////////////
+///////////////////////////////// 
+
+router.post      ('/protected/studentenhuis',   Studenthuis.registerhouse);
+router.get      ('/protected/studentenhuis',    Studenthuis.getHouses);
 router.get      ('/protected/studentenhuis/*/', Studenthuis.getSpecificHouse);
 router.put      ('/protected/studentenhuis/*/', Studenthuis.putHouse);
 router.delete   ('/protected/studentenhuis/*/', Studenthuis.deleteHouse);
 
+////////////////////////////////////
+///IF /API USE ROUTER///////////////
+//////////////////////////////////// 
 app.use('/api', router);
 
 

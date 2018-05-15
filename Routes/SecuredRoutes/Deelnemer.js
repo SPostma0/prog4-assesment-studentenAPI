@@ -1,4 +1,7 @@
 exports.registerParticipant = function(req,res){
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////     
     console.log("Participant register router called");
     var mysql      = require('mysql');
     var db = require('./../../DB');
@@ -7,21 +10,31 @@ exports.registerParticipant = function(req,res){
     var Security = require('./../../Security');
 
  
-    ////Decode token and get userid from it
+//////////////////////////////
+///FETCH UID FROM TOKEN///////
+//////////////////////////////  
+
       decodedToken = Security.decodeToken(req,res);
       UserID = JSON.parse(decodedToken).id;
 
-    //checking input fields
+/////////////////////////////////
+///SPLITTING PATH FOR DATA///////
+/////////////////////////////////  
+
     var pad = req.path.split('/');
     var houseId = pad[3];
     var maaltijdID = pad[5]
 
+/////////////////////////////////////////
+///CREATING DEELNEMER FOR INSERT/////////
+/////////////////////////////////////////   
 
-    ////Creating set from User
     var deelnemer = new Deelnemer("" + UserID, ""+ houseId, ""+ maaltijdID);
-    
-
     console.log(JSON.stringify(deelnemer));
+
+/////////////////////////////////
+///VALIDATION OF PARAMS//////////
+/////////////////////////////////         
     if(deelnemer.UserID == null || deelnemer.StudentenhuisID == null || deelnemer.MaaltijdID == null){
           res.status(401);
           res.json({
@@ -31,9 +44,14 @@ exports.registerParticipant = function(req,res){
           return;
     }
 
-    ////Fire query
+/////////////////////////////////
+///FIRE INSERT TO DATABA/////////
+/////////////////////////////////     
     connection.connection.query('INSERT INTO deelnemers SET ?', deelnemer, function (error, results, fields) {
 
+///////////////////////////////////////////////////////////////
+///IF DB ERRORS ON YOU. LIKELY ALREADY EXISTING RECORD/////////
+///////////////////////////////////////////////////////////////           
     if (error) {
         console.log("/reg participant/ Patricipant already subscribed. ");
         res.send({
@@ -45,6 +63,10 @@ exports.registerParticipant = function(req,res){
         connection.connection.end();
         }else{
 
+/////////////////////////////////
+///GREAT BALLS OF FIRE///////////
+/////////////////////////////////     
+
         res.send({
           "code":200,
           "success":"participant registered sucessfully"
@@ -55,10 +77,11 @@ exports.registerParticipant = function(req,res){
     });
   }
 
-
-
-
   exports.getParticipants = function(req,res){
+
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////   
 
     var mysql      = require('mysql');
     var db = require('./../../DB');
@@ -67,31 +90,45 @@ exports.registerParticipant = function(req,res){
     var Security = require('./../../Security');
     var Deelnemer = require('./../../domain/Deelnemer');
 
-    ////Decode token and get userid from it
+//////////////////////////////
+///FETCH UID FROM TOKEN///////
+//////////////////////////////  
+
     decodedToken = Security.decodeToken(req,res);
     UserID = JSON.parse(decodedToken).id;
 
-    //checking input fields
+/////////////////////////////////
+///SPLITTING PATH FOR DATA///////
+/////////////////////////////////  
+
     var pad = req.path.split('/');
     var houseId = pad[3];
     var maaltijdID = pad[5]
 
 
+/////////////////////////////////
+///FIRE QUERY AT DB./////////////
+///////////////////////////////// 
 
-        ////Fire query
     connection.connection.query('SELECT * FROM deelnemers WHERE StudentenhuisID = "' + houseId + '" AND MaaltijdID = "' + maaltijdID + '";',  function (error, results, fields) {
 
-      /////////IN GEVAL DB ERROR
+/////////////////////////////////
+///ON DB ERROR 400///////////////
+///////////////////////////////// 
+    
     if (error) {
         console.log("/get participants/ Error occured" + error);
         res.send({
         "code":400,
         "failed":"error ocurred"
         })
-
         res.end();
         connection.connection.end();
 
+
+////////////////////////////////////////////
+///PUT STUFF IN RESPONSE ARRAY./////////////
+/////////////////////////////////////////// 
     }else{
         responseArray = [];
       results.forEach(element => {
@@ -109,8 +146,10 @@ exports.registerParticipant = function(req,res){
 
   
   exports.deletePatricipant = function(req,res){
+//////////////////////////////
+///////SETUP DEPENDANCIES/////
+//////////////////////////////     
     console.log('deletePatricipant router called');
-
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
@@ -118,23 +157,31 @@ exports.registerParticipant = function(req,res){
     var Security = require('./../../Security');
     var Deelnemer = require('./../../domain/Deelnemer');
 
-    ////Decode token and get userid from it
+//////////////////////////////
+///FETCH UID FROM TOKEN///////
+//////////////////////////////  
     decodedToken = Security.decodeToken(req,res);
     UserID = JSON.parse(decodedToken).id;
 
-    //checking input fields
+/////////////////////////////////
+///SPLITTING PATH FOR DATA///////
+/////////////////////////////////  
     var pad = req.path.split('/');
     var houseId = pad[3];
     var maaltijdID = pad[5]
 
 
 
-    ////Fire query
+/////////////////////////////////
+///FIRE QUERY AT DB//////////////
+///////////////////////////////// 
+    
     connection.connection.query('DELETE FROM deelnemers WHERE StudentenhuisID = "' + houseId + '" AND MaaltijdID = "' + maaltijdID + '" AND UserID = "' + UserID + '";',  function (error, results, fields) {
 
-
-
-      /////////IN GEVAL DB ERROR
+/////////////////////////////////
+///ON DB ERROR 400///////////////
+///////////////////////////////// 
+    
     if (error) {
         console.log("/delete participant/ Error occured" + error);
         res.send({
@@ -144,7 +191,9 @@ exports.registerParticipant = function(req,res){
 
         res.end();
         connection.connection.end();
-
+/////////////////////////////////
+///ON SUCCES/////////////////////
+///////////////////////////////// 
     }else{
         res.status(200);
         res.json({
