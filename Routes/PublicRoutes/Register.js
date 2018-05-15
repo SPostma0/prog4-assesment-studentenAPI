@@ -10,7 +10,7 @@
     ////Getting values from body;
     var user = new User(req.body.Voornaam, req.body.Achternaam, req.body.Email, req.body.Wachtwoord);
 
-    if (typeof user.Voornaam === '' || typeof user.Achternaam === '' || typeof user.Email === '' || typeof user.Wachtwoord === '') {
+    if (typeof user.Voornaam === null || typeof user.Achternaam === null || typeof user.Email === null || typeof user.Wachtwoord === null) {
       res.status(412).json({
           "message": 'One or more parameters are missing',
           "status": 412,
