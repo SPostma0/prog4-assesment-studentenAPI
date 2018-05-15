@@ -27,6 +27,7 @@ var LoginRouter = require('./Routes/PublicRoutes/Login');
 
 var Studenthuis = require('./Routes/SecuredRoutes/Studenthuis');
 var Maaltijd = require('./Routes/SecuredRoutes/Maaltijd');
+var Deelnemer = require('./Routes/SecuredRoutes/Deelnemer');
 
 
 /////////////////////////////
@@ -84,17 +85,21 @@ router.post('/public/register', RegisterRouter.register);
 router.post('/public/login', LoginRouter.login)
 
 
-router.post   ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);
-router.get    ('/protected/studentenhuis/*/maaltijd', Maaltijd.getMeals);
-router.get    ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.getSpecificMeal);
-router.put    ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.putMeal);
-router.delete ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.deleteMeal);
+router.post     ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.registerParticipant);
+router.get      ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.getParticipants)
+router.delete   ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.deletePatricipant)
 
-router.post   ('/protected/studentenhuis', Studenthuis.registerhouse);
-router.get    ('/protected/studentenhuis', Studenthuis.getHouses);
-router.get    ('/protected/studentenhuis/*/', Studenthuis.getSpecificHouse);
-router.put    ('/protected/studentenhuis/*/', Studenthuis.putHouse);
-router.delete ('/protected/studentenhuis/*/', Studenthuis.deleteHouse);
+router.post     ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);
+router.get      ('/protected/studentenhuis/*/maaltijd', Maaltijd.getMeals);
+router.get      ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.getSpecificMeal);
+router.put      ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.putMeal);
+router.delete   ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.deleteMeal);
+
+router.post      ('/protected/studentenhuis', Studenthuis.registerhouse);
+router.get      ('/protected/studentenhuis', Studenthuis.getHouses);
+router.get      ('/protected/studentenhuis/*/', Studenthuis.getSpecificHouse);
+router.put      ('/protected/studentenhuis/*/', Studenthuis.putHouse);
+router.delete   ('/protected/studentenhuis/*/', Studenthuis.deleteHouse);
 
 
 
@@ -117,7 +122,7 @@ app.use('*', function (req, res, next){
 
 
 app.listen(PORT, () => {
-	console.log('Listening on port: ' + PORT)
+	console.log('Listening on port: ' + PORT);
 })
 
 
