@@ -4,18 +4,12 @@ exports.registermeal = function (req, res) {
     var db = require('./../../DB');
     var connection = new db;
     var Maaltijd = require('./../../domain/Maaltijd');
-    var Security = require('./../../Security');
-
-
-    ////Decode token and get userid from it
-      decodedToken = Security.decodeToken(req,res);
-      UserID = JSON.parse(decodedToken).id;
 
     //checking input fields
     var pad = req.path.split('/');
 
     ////Creating set from User
-    var meal = new Maaltijd(req.body.Naam, req.body.Beschrijving, req.body.Ingredienten, req.body.Allergie, req.body.Prijs, ""+UserID, pad[3]);
+    var meal = new Maaltijd(req.body.Naam, req.body.Beschrijving, req.body.Ingredienten, req.body.Allergie, req.body.Prijs, req.body.UserID, pad[3]);
     console.log(JSON.stringify(req.body));
 
 <<<<<<< HEAD
@@ -24,6 +18,7 @@ exports.registermeal = function (req, res) {
         res.json({"message": "Een of meer properties in de request body ontbreken of zijn foutief"})
 =======
     if(meal.Naam == null || meal.Beschrijving  == null || meal.Ingredienten  == null || meal.Allergie  == null || meal.Prijs == null || meal.UserID  == null || meal.StudentenhuisID == null){
+<<<<<<< HEAD
         console.log("/registermeal/ 412. Wrong paramters")
         res.json({"message" : "Een of meer properties in de request body ontbreken of zijn foutief"})
 >>>>>>> master
@@ -32,6 +27,15 @@ exports.registermeal = function (req, res) {
         connection.end()
         return;
     }
+=======
+      console.log("/registermeal/ 412. Wrong paramters")
+      res.json({"message" : "Een of meer properties in de request body ontbreken of zijn foutief"})
+      res.status(412);
+      res.end();
+      connection.end()
+      return;
+  }
+>>>>>>> parent of 2ba53ca... Merge pull request #13 from SPostma0/Maaltijd
 
 
     var newMeal = {
@@ -120,6 +124,7 @@ exports.getSpecificMeal = function (req, res) {
     var Maaltijd = require('./../../domain/Maaltijd');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /////split path naar array.
     var pad = req.path.split('/');
 =======
@@ -189,27 +194,49 @@ exports.putMeal = function (req, res) {
       decodedToken = Security.decodeToken(req,res);
       UserID = JSON.parse(decodedToken).id;
     //Get values for the new house
+=======
 
 
-    var pad = req.path.split('/');
-    var houseID = pad[3];
-    var maaltijdID = pad[5];
 
-    var maaltijdNaam = req.body.Naam;
-    var maaltijdBeschrijving = req.body.Beschrijving;
-    var maaltijdIngredienten = req.body.Ingredienten;
-    var maaltijdAllergie = req.body.Allergie;
-    var maaltijdPrijs = req.body.Prijs;
-    var maaltijdUserID =  ""+UserID;
+exports.putMeal= function(req,res){
+  console.log("put meal router called");
+  var mysql      = require('mysql');
+  var db = require('./../../DB');
+  var connection = new db;
+  var Maaltijd = require('./../../domain/Maaltijd');
+  var jwt = require('jsonwebtoken');
+  var Security = require('./../../Security');
+>>>>>>> parent of 2ba53ca... Merge pull request #13 from SPostma0/Maaltijd
+
+  //Get values for the new house
+
+
+  var pad = req.path.split('/');
+  var houseID = pad[3];
+  var maaltijdID = pad[5];
+
+  var maaltijdNaam = req.body.Naam;
+  var maaltijdBeschrijving = req.body.Beschrijving;
+  var maaltijdIngredienten = req.body.Ingredienten;
+  var maaltijdAllergie = req.body.Allergie;
+  var maaltijdPrijs = req.body.Prijs;
+  var maaltijdUserID =  req.body.userid;
   
-    meal = new Maaltijd(maaltijdNaam, maaltijdBeschrijving, maaltijdIngredienten,maaltijdAllergie, maaltijdPrijs,"" +  maaltijdUserID,"" +  houseID);
+  meal = new Maaltijd(maaltijdNaam, maaltijdBeschrijving, maaltijdIngredienten,maaltijdAllergie, maaltijdPrijs,"" +  maaltijdUserID,"" +  houseID);
 
+  console.log(JSON.stringify(meal));
+
+
+
+<<<<<<< HEAD
     console.log(JSON.stringify(meal));
 >>>>>>> master
 
     //Get values for the new house
 
 <<<<<<< HEAD
+=======
+>>>>>>> parent of 2ba53ca... Merge pull request #13 from SPostma0/Maaltijd
 
     var pad = req.path.split('/');
     var houseID = pad[3];
@@ -230,21 +257,11 @@ exports.putMeal = function (req, res) {
     connection.end()
     return;
 }
-                ///////@TODO VALIDATE TOKEN
-    connection.connection.query('SELECT * FROM maaltijd WHERE UserID = "' + UserID + '" AND ID = "' + maaltijdID + '";',  function (error, results, fields) {
-                /////////IN GEVAL DB ERROR
-    if (error) {
-    console.log("/putmeal/ Error occured" + error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    })
-    res.end();
-    connection.connection.end();
-  }else{
-                //////////////Als auth Success
-      if(results.length === 1){
-          console.log("Login succesfull")
+
+
+ ///////@TODO VALIDATE TOKEN
+    
+
 
   connection.connection.query('UPDATE maaltijd SET Naam = "' + meal.Naam + '" , Beschrijving = "' + meal.Beschrijving + '", Allergie = "' + meal.Allergie + '", Prijs = "' + meal.Prijs + '", Ingredienten = "' + meal.Ingredienten + '" WHERE studentenhuisID ="' + meal.StudentenhuisID + '" AND ID = "' + maaltijdID  + '";',  function(error,results,fields){
       if(error){
@@ -265,15 +282,6 @@ exports.putMeal = function (req, res) {
           connection.connection.end();
       }
   });
-          //////////Not auth
-      }else{
-          console.log("/putmeal/No token match")
-          res.send({message:"Insufficient permission"})
-          res.end();
-          connection.connection.end();
-      }
-  }
-});
 }
 >>>>>>> master
 
@@ -292,6 +300,7 @@ exports.putMeal = function (req, res) {
     }
 
 
+<<<<<<< HEAD
     ///////@TODO VALIDATE TOKEN
 
 
@@ -324,6 +333,8 @@ exports.putMeal = function (req, res) {
 
 >>>>>>> master
 
+=======
+>>>>>>> parent of 2ba53ca... Merge pull request #13 from SPostma0/Maaltijd
   
 
 <<<<<<< HEAD
@@ -364,21 +375,9 @@ exports.deleteMeal = function (req, res) {
     });
 =======
  ///////@TODO VALIDATE TOKEN
- connection.connection.query('SELECT * FROM maaltijd WHERE UserID = "' + UserID + '" AND ID = "' + maaltijdID + '"AND StudentenhuisID = "' + houseId + '";',  function (error, results, fields) {
+    
 
-    /////////IN GEVAL DB ERROR
-  if (error) {
-    console.log("/deletemeal/ Error occured" + error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    })
-    res.end();
-    connection.connection.end();
-  }else{
-            //////////////IF AUTH GOOD
-      if(results.length === 1){
-          console.log("auth succesfull")
+
   connection.connection.query('DELETE FROM maaltijd WHERE ID = "' + maaltijdID + '" AND studentenhuisID = "' + houseId + '";',  function(error,results,fields){
       if(error){
           console.log("The following error occured: "+ error);
@@ -392,12 +391,13 @@ exports.deleteMeal = function (req, res) {
 
           res.send({
               "code":200,
-              "success":"Deletion succeeded"
+              "success":"Opperation Succesfull"
           });
           res.end();
           connection.connection.end();
       }
   });
+<<<<<<< HEAD
         
 
           //////////Token komt niet overeen
@@ -414,5 +414,7 @@ exports.deleteMeal = function (req, res) {
 
 
 >>>>>>> master
+=======
+>>>>>>> parent of 2ba53ca... Merge pull request #13 from SPostma0/Maaltijd
 }
 

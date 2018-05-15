@@ -24,7 +24,7 @@
     connection.connection.query('INSERT INTO user SET ?', newUser, function (error, results, fields) {
 
     if (error) {
-      console.log("error ocurred in register. Is the email unique?");
+      console.log("error ocurred in register");
       res.send({
         "code":400,
         "failed":"error ocurred"
@@ -33,7 +33,7 @@
 
       connection.connection.end();
     }else{
-      console.log('Regged user! ')
+      console.log('The solution is: ', results);
       res.send({
         "code":200,
         "success":"user registered sucessfully"
@@ -43,5 +43,3 @@
     }
     });
   }
-
-

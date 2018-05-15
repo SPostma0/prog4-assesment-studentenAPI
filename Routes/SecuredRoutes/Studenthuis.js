@@ -4,11 +4,15 @@ exports.registerhouse = function (req, res) {
     var db = require('./../../DB');
     var connection = new db;
 <<<<<<< HEAD
+<<<<<<< HEAD
     var Studentenhuis = require('./../../domain/Studentenhuis');
 =======
     var Studentenhuis = require('./../../domain/Studentenhuis'); 
 >>>>>>> master
     var Security = require('./../../Security');
+=======
+    var Studentenhuis = require('./../../domain/Studentenhuis'); var Security = require('./../../Security');
+>>>>>>> parent of 2ba53ca... Merge pull request #13 from SPostma0/Maaltijd
 
 
     ////Decode token and get userid from it
@@ -166,10 +170,14 @@ exports.putHouse = function (req, res) {
 
     //Get values for the new house
 <<<<<<< HEAD
+<<<<<<< HEAD
     var house = new Studentenhuis(req.body.Naam, req.body.Adres);
 =======
     var house = new Studentenhuis(req.body.Naam, req.body.Adres, ""+UserID);  
 >>>>>>> master
+=======
+    var house = new Studentenhuis(req.body.Naam, req.body.Adres);  
+>>>>>>> parent of 2ba53ca... Merge pull request #13 from SPostma0/Maaltijd
     var pad = req.path.split('/');
     var houseID = pad[3];
 
