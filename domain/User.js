@@ -1,8 +1,3 @@
-
-
-    const bcrypt = require('bcrypt');
-    const saltRounds = 25;
-
 class User {
 
     constructor(Voornaam, Achternaam, Email, Wachtwoord){
