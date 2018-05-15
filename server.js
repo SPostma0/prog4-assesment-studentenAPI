@@ -91,16 +91,11 @@ app.use('/api/protected/*', Security.ensureToken, (req, res, next) =>{
 router.post('/public/register', RegisterRouter.register);
 router.post('/public/login', LoginRouter.login)
 
-router.post   ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);
-router.get    ('/protected/studentenhuis/*/maaltijd', Maaltijd.getMeals);
-router.get    ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.getSpecificMeal);
-router.put    ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.putMeal);
-router.delete ('/protected/studentenhuis/*/maaltijd/*/', Maaltijd.deleteMeal);
 
 router.post     ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.registerParticipant);
 router.get      ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.getParticipants)
 router.delete   ('/protected/studentenhuis/*/maaltijd/*/deelnemers/', Deelnemer.deletePatricipant)
->>>>>>> master
+
 
 router.post     ('/protected/studentenhuis/*/maaltijd', Maaltijd.registermeal);
 router.get      ('/protected/studentenhuis/*/maaltijd', Maaltijd.getMeals);

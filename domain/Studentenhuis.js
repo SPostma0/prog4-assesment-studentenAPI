@@ -1,10 +1,11 @@
 
 
-    // const bcrypt = require('bcrypt');
-    // const saltRounds = 25;
+
 
 class Studentenhuis {
-
+/////////////////////////////
+////////////CONSTRUCTOR//////
+/////////////////////////////
     constructor(Naam, Adres, UserID){
     
         //todo asserts
@@ -18,20 +19,6 @@ class Studentenhuis {
       this.Adres= Adres;
       this.UserID = UserID;
     
-}
-
-setNaam(naam){
-    this.Naam = naam;
-}
-setAdress(adress){
-    this.Adres = adress;
-}
-
-getNaam(){
-    return this.Naam;
-}
-getAdress(){
-    return this.Adres;
 }
 
 }

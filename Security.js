@@ -7,6 +7,7 @@ exports.secret = 'rainbowinthesky';
 /////////////////////////////
 ////////////SETUP HEADER/////
 /////////////////////////////
+
 exports.ensureToken = function ensureToken(req, res, next) {
 
     const bearerHeader = req.headers["authorization"];
