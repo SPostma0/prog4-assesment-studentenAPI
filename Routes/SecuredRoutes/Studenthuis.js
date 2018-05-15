@@ -3,7 +3,11 @@ exports.registerhouse = function (req, res) {
     var mysql = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
+
     var Studentenhuis = require('./../../domain/Studentenhuis');
+
+    var Studentenhuis = require('./../../domain/Studentenhuis'); 
+
     var Security = require('./../../Security');
 
 
@@ -161,7 +165,10 @@ exports.putHouse = function (req, res) {
 
 
     //Get values for the new house
-    var house = new Studentenhuis(req.body.Naam, req.body.Adres);
+
+
+    var house = new Studentenhuis(req.body.Naam, req.body.Adres, ""+UserID);  
+
     var pad = req.path.split('/');
     var houseID = pad[3];
 
