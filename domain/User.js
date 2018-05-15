@@ -16,7 +16,7 @@ class User {
         assert(typeof (Wachtwoord) === 'string', 'Wachtwoord must be a string');
         assert(Wachtwoord.length > 2,'Wachtwoord must be atleast 3 letters');
     }catch(ex){
-         throw(new ApiError(ex.toString(), 422))
+         throw(new ApiError(ex, 422))
     }
  
       this.Wachtwoord = Wachtwoord;

@@ -35,8 +35,8 @@ module.exports = class Maaltijd {
 
     }catch(ex){
 
-        console.log(ex.toString());
-  //     throw(new ApiError(ex.toString(), 422))
+        // console.log(ex.toString());
+      throw(new ApiError(ex, 422))
   return;
     }
 }}
