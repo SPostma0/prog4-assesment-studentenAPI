@@ -3,19 +3,22 @@
 /////////////////////////////
 //////SETUP DEPENDANCIES/////
 /////////////////////////////
+
     var mysql      = require('mysql');
     var db = require('./../../DB');
     var connection = new db;
-    var User = require('./../../domain/User');
+    var User = require('./../../domain/User').user;
 
 //////////////////////////////////
 //////CREATING USER FROM BODY/////
 //////////////////////////////////
+
     var user = new User(req.body.Voornaam, req.body.Achternaam, req.body.Email, req.body.Wachtwoord);
 
 ///////////////////////////////////
 ////CREATING SET FOR DB INSERT/////  NOT ACTUALLY REQUIRED. BUT WOULD ALLOW FOR EASY LOCALIZED ASSERTION OF ERRORS.
 ///////////////////////////////////
+
     var newUser={
         "Voornaam": user.Voornaam,
         "Achternaam": user.Achternaam,
@@ -23,7 +26,6 @@
         "Wachtwoord": user.Wachtwoord 
     }
     console.log("Got user from body: " + JSON.stringify(newUser));
-
 
 /////////////////////////////
 ////FIRE QUERY AT DATABA/////
