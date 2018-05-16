@@ -1,6 +1,4 @@
-
-
-
+const ApiError = require('./ApiError')
 
 class Studentenhuis {
 /////////////////////////////
@@ -10,7 +8,10 @@ class Studentenhuis {
     
         //todo asserts
     try{
-       //assertions here
+        assert(typeof (naam) === 'string', "Name must be a string");
+        assert(typeof (adres) === 'string', "Adress must be a string");
+        assert(naam.trim().length > 2, "Name has to be atleast 3 characters");
+        assert(adres.trim().length > 2, "Adress has to be atleast 3 characters");
     }catch(ex){
         throw(new ApiError(ex.toString(), 422))
     }
