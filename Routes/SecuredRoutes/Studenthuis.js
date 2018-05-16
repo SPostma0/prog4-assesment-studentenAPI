@@ -25,7 +25,6 @@ var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
 }catch(ex){
     console.log(ex.toString());
     res.status(404).send({"message":"Missing paramters"}).end();
-
     throw(new ApiError(404, "Wrong paramters: Naam: " + req.body.Naam+"  Adres: " + req.body.Adres + "  " + UserID));
 
 }
@@ -69,9 +68,18 @@ var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
             connection.connection.end();
         } else {
 
+
+
+            
+            res.status(200);
             res.send({
-                "code":200,
-                "success":"StudentHouse registered sucessfully"
+                
+                  
+                    "naam": newHouse.Naam,
+                    "adres": newHouse.Adres,
+                    "contact": newHouse.UserID,
+                    "email": "Jack@box.nl"
+                  
             });
             res.end();
             connection.connection.end();
@@ -182,7 +190,7 @@ exports.getSpecificHouse= function(req,res){
 ///RETURN JSON WITH 1 HOUSE/////////
 ////////////////////////////////////     
 
-                res.json(responsearray);
+                res.json(responsearray[0]);
                 res.end();
                 connection.connection.end();}
                 else{
@@ -225,8 +233,14 @@ exports.putHouse= function(req,res){
 /////////////////////////////////
 ///GETTING DATA FROM BODY////////
 /////////////////////////////////  
-
+try{
     var house = new Studentenhuis(req.body.Naam, req.body.Adres, ""+UserID); 
+}catch(Ex){
+    console.log(Ex.toString());
+    res.status(412).send({"message":"Missing paramters"}).end();
+    return;
+}
+
 
 /////////////////////////////////
 ///SPLITTING PATH FOR DATA///////
@@ -305,12 +319,14 @@ exports.putHouse= function(req,res){
 ///IF SUCCESFULL UPDATE//////////
 /////////////////////////////////                 
         } else {
-            res.send({
-                "code":200,
-                "success":"StudentHouse updated sucessfully"
-            });
+            res.status(200).send({
+                "ID": houseID,
+                "naam": house.Naam,
+                "adres": house.Adres,
+                "contact": UserID,
+                "email": "Email van user:  " + UserID
+            }).end();
             connection.end();
-            res.end();
             return;          
         }
     });

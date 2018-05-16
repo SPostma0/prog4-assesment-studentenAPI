@@ -3,7 +3,7 @@
 ////////////SETUP SECRET/////
 /////////////////////////////
 exports.secret = 'rainbowinthesky';
-exports.saltrounds = 15;
+exports.saltrounds = 5;
 
 /////////////////////////////
 ////////////SETUP HEADER/////

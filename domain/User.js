@@ -7,9 +7,10 @@ exports.user = class User {
 ////////////CONSTRUCTOR//////
 /////////////////////////////
     constructor(Voornaam, Achternaam, Email, Wachtwoord){
+        
         var bcrypt = require('bcrypt');
         var Security = require('./../Security');
-        const assert = require('assert')
+        const assert = require('assert');
         const validator = require('validator');
         
         
@@ -32,8 +33,6 @@ exports.user = class User {
         this.Voornaam = Voornaam;
         this.Achternaam = Achternaam;
         this.Email = Email;
- 
-        
     }
  
 }

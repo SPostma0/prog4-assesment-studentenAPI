@@ -9,12 +9,13 @@ let validToken;
 chai.request('localhost:3000')
     .post('/api/public/login')
     .send({
-    "Email": "Jack@box.nl",
+    "Email": "jsmit@server.nl",
     "Wachtwoord": "Wachtwoord"
 })
     .end((err, res) => {
 
-    validToken = res.body.token;
+
+    validToken = 'Bearer ' + res.body.token;
     });
 
 let deleteID;
@@ -23,7 +24,7 @@ describe('Studentenhuis POST', () => {
     it('Throw error on invalid token', (done) => {
         chai.request('localhost:3000')
             .post('/api/protected/Routes/SecuredRoutes/Studenthuis')
-            .set('x-access-token', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
+            .set('Authorization', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
             .send({
                 "naam": "string",
                 "adres": "help"
@@ -36,7 +37,7 @@ describe('Studentenhuis POST', () => {
     it('Should return studenthuis on posting valid object', (done) => {
         chai.request('localhost:3000')
             .post('/api/protected/studentenhuis/')
-            .set('x-access-token', validToken)
+            .set('Authorization', validToken)
             .send({
                 "naam": "string",
                 "adres": "help"
@@ -63,7 +64,7 @@ describe('Studentenhuis POST', () => {
             .send({
                 "adres": "help"
             })
-            .set('x-access-token', validToken)
+            .set('Authorization', validToken)
             .end((err, res) => {
                 res.should.have.status(412);
 
@@ -73,8 +74,8 @@ describe('Studentenhuis POST', () => {
 
     it('Throw error on missing adress', (done) => {
         chai.request('localhost:3000')
-            .post('/api/protected/Routes/SecuredRoutes/Studenthuis')
-            .set('x-access-token', validToken)
+            .post('/api/protected/studentenhuis/')
+            .set('Authorization', validToken)
             .send({
                 "naam": "help"
             })
@@ -89,8 +90,8 @@ describe('Studentenhuis POST', () => {
 describe('Studentenhuis GET all', () => {
     it('Throw error on invalid token', (done) => {
         chai.request('localhost:3000')
-            .get('/api/protected/Routes/SecuredRoutes/Studenthuis')
-            .set('x-access-token', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
+            .get('/api/protected/studentenhuis/')
+            .set('Authorization', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
             .end((err, res) => {
                 done()
             });
@@ -98,11 +99,11 @@ describe('Studentenhuis GET all', () => {
 
     it('Return all studenthuis, on valid token', (done) => {
         chai.request('localhost:3000')
-            .get('/api/protected/Routes/SecuredRoutes/Studenthuis')
-            .set('x-access-token', validToken)
+            .get('/api/protected/studentenhuis/')
+            .set('Authorization', validToken)
             .end((err, res) => {
                 res.should.have.status(200);
-                res.body.should.be.a('object');
+                res.body.should.be.a('array');
                 done()
             });
     })
@@ -111,8 +112,8 @@ describe('Studentenhuis GET all', () => {
 describe('Studentenhuis GET one', () => {
     it('Throw error on invalid token', (done) => {
         chai.request('localhost:3000')
-            .get('/api/protected/Routes/SecuredRoutes/Studenthuis')
-            .set('x-access-token', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
+            .get('/api/protected/studentenhuis/')
+            .set('Authorization', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
             .end((err, res) => {
                 done()
             });
@@ -120,12 +121,12 @@ describe('Studentenhuis GET one', () => {
 
     it('Return studenthuis on existing ID', (done) => {
         chai.request('localhost:3000')
-            .get('/api/protected/Routes/SecuredRoutes/Studenthuis/1')
-            .set('x-access-token', validToken)
+            .get('/api/protected/studentenhuis/1')
+            .set('Authorization', validToken)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
-                res.body.result[0].should.have.property("id").and.equal(1);
+                res.body.should.have.property("UserID").and.equal(1);
                 done()
             });
 
@@ -133,8 +134,8 @@ describe('Studentenhuis GET one', () => {
 
     it('Throw error on non-existing ID', (done) => {
         chai.request('localhost:3000')
-            .get('/api/protected/Routes/SecuredRoutes/Studenthuis/600000')
-            .set('x-access-token', validToken)
+            .get('/api/protected/studentenhuis/600000')
+            .set('Authorization', validToken)
             .end((err, res) => {
                 res.should.have.status(404);
                 done()
@@ -145,8 +146,8 @@ describe('Studentenhuis GET one', () => {
 describe('Studentenhuis PUT', () => {
     it('Throw error on invalid token', (done) => {
         chai.request('localhost:3000')
-            .put('/api/protected/Routes/SecuredRoutes/Studenthuis')
-            .set('x-access-token', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
+            .put('/api/protected/studentenhuis')
+            .set('Authorization', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
             .send({
                 "naam": "string",
                 "adres": "help"
@@ -158,22 +159,22 @@ describe('Studentenhuis PUT', () => {
 
     it('Return object on valid studenthuis', (done) => {
         chai.request('localhost:3000')
-            .put('/api/protected/Routes/SecuredRoutes/Studenthuis/1')
-            .set('x-access-token', validToken)
+            .put('/api/protected/studentenhuis/1')
+            .set('Authorization', validToken)
             .send({
-                "naam": "string",
-                "adres": "help"
+                "Naam": "string",
+                "Adres": "help"
             })
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
 
-                const response = res.body.result[0];
-                response.should.have.property('id');
-                response.should.have.property('naam').and.equals("string");
-                response.should.have.property('adres').and.equals("help");
-                response.should.have.property('contact');
-                response.should.have.property('email');
+              //  const response = res.body.result[0];
+                res.body.should.have.property('ID');
+                res.body.should.have.property('naam');
+                res.body.should.have.property('adres');
+                res.body.should.have.property('contact');
+                res.body.should.have.property('email');
 
                 done()
             });
@@ -181,8 +182,8 @@ describe('Studentenhuis PUT', () => {
 
     it('Throw error on missing name', (done) => {
         chai.request('localhost:3000')
-            .put('/api/protected/Routes/SecuredRoutes/Studenthuis/1')
-            .set('x-access-token', validToken)
+            .put('/api/protected/studentenhuis//1')
+            .set('Authorization', validToken)
             .send({
                 "adres": "help"
             })
@@ -195,10 +196,10 @@ describe('Studentenhuis PUT', () => {
 
     it('Throw error on missing adress', (done) => {
         chai.request('localhost:3000')
-            .put('/api/protected/Routes/SecuredRoutes/Studenthuis/1')
-            .set('x-access-token', validToken)
+            .put('/api/protected/studentenhuis/1')
+            .set('Authorization', validToken)
             .send({
-                "naam": "string"
+                "Naam": "string"
             })
             .end((err, res) => {
                 res.should.have.status(412);
@@ -211,11 +212,11 @@ describe('Studentenhuis PUT', () => {
 describe('Studentenhuis DELETE', () => {
     it('Throw error on invalid token', (done) => {
         chai.request('localhost:3000')
-            .delete('/api/protected/Routes/SecuredRoutes/Studenthuis')
-            .set('x-access-token', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
+            .delete('api/protected/studentenhuis')
+            .set('Authorization', validToken)
             .send({
-                "naam": "string",
-                "adres": "help"
+                "Naam": "jjjjjjjjjjjj",
+                "Adres": "dddddddd"
             })
             .end((err, res) => {
                 done()
@@ -224,8 +225,8 @@ describe('Studentenhuis DELETE', () => {
 
     it('Delete studenthuis', (done) => {
         chai.request('localhost:3000')
-            .delete('/api/protected/Routes/SecuredRoutes/Studenthuis' + deleteID)
-            .set('x-access-token', validToken)
+            .delete('api/protected/studentenhuis/' + deleteID)
+            .set('Authorization', validToken)
             .end((err, res) => {
                 res.should.have.status(200);
 
