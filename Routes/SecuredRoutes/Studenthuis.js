@@ -8,6 +8,7 @@ exports.registerhouse= function(req,res){
     var connection = new db;
     var Studentenhuis = require('./../../domain/Studentenhuis'); 
     var Security = require('./../../Security');
+    var ApiError = require('.//../../domain/ApiError');
 
 //////////////////////////////
 ///FETCH UID FROM TOKEN///////
@@ -19,8 +20,16 @@ exports.registerhouse= function(req,res){
 /////////////////////////////////
 ///GETDATA FROM BODY/////////////
 ///////////////////////////////// 
+try{
+var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
+}catch(ex){
+    console.log(ex.toString());
+    res.status(404).send({"message":"Missing paramters"}).end();
 
-    var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
+    throw(new ApiError(404, "Wrong paramters: Naam: " + req.body.Naam+"  Adres: " + req.body.Adres + "  " + UserID));
+
+}
+    
 
 /////////////////////////////////
 ///VALIDATING INPUT FIELDS///////

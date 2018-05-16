@@ -5,16 +5,15 @@ class Studentenhuis {
 ////////////CONSTRUCTOR//////
 /////////////////////////////
     constructor(Naam, Adres, UserID){
+        const assert = require('assert');
     
         //todo asserts
-    try{
-        assert(typeof (naam) === 'string', "Name must be a string");
-        assert(typeof (adres) === 'string', "Adress must be a string");
-        assert(naam.trim().length > 2, "Name has to be atleast 3 characters");
-        assert(adres.trim().length > 2, "Adress has to be atleast 3 characters");
-    }catch(ex){
-        throw(new ApiError(ex.toString(), 422))
-    }
+
+        assert(typeof (Naam) === 'string', "Naam must be a string");
+        assert(typeof (Adres) === 'string', "Adress must be a string");
+        assert(Naam.trim().length > 2, "Name has to be atleast 3 characters");
+        assert(Adres.trim().length > 2, "Adress has to be atleast 3 characters");
+
  
       this.Naam= Naam;
       this.Adres= Adres;
