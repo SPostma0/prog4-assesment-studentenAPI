@@ -11,12 +11,14 @@ let validToken;
 describe('Registration', () => {
     it('should return a token when providing valid information', (done) => {
 
+        rndm = Math.floor(Math.random() * Math.floor(50000));
+
         chai.request('localhost:3000')
             .post('/api/public/register')
             .send({
                 "Voornaam": "Sander",
                 "Achternaam": "Postma",
-                "Email": "Sander@rotzii.nl",
+                "Email": "Sander@r" + rndm + "otzii.nl",
                 "Wachtwoord": "rotzii"
             })
             .end((err, res) => {
@@ -172,7 +174,7 @@ describe('Login', () => {
             .post('/api/public/login')
             .send({
                 "Email": "Jack@box.nl",
-                "Wachtwoord": "thepassword"
+                "Wachtwoord": "thebombb"
             })
             .end((err, res) => {
                 res.should.have.status(412)
