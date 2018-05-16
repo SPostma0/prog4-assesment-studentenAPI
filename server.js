@@ -132,9 +132,7 @@ app.use('/api', router);
 //////////////////////////////
 app.use('*', function (req, res, next){
     console.log('End endpoint')
-    res.json({ message: 'Nothing here' });
-    res.status(404);
-    res.end();
+    res.status(404).send({ message: 'Nothing here' }).end();
 })
 
 

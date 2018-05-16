@@ -8,6 +8,7 @@ exports.registerhouse= function(req,res){
     var connection = new db;
     var Studentenhuis = require('./../../domain/Studentenhuis'); 
     var Security = require('./../../Security');
+    var ApiError = require('.//../../domain/ApiError');
 
 //////////////////////////////
 ///FETCH UID FROM TOKEN///////
@@ -19,8 +20,15 @@ exports.registerhouse= function(req,res){
 /////////////////////////////////
 ///GETDATA FROM BODY/////////////
 ///////////////////////////////// 
+try{
+var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
+}catch(ex){
+    console.log(ex.toString());
+    res.status(412).send({"message":"Missing paramters"}).end();
+    throw(new ApiError(412, "Wrong paramters: Naam: " + req.body.Naam+"  Adres: " + req.body.Adres + "  " + UserID));
 
-    var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
+}
+    
 
 /////////////////////////////////
 ///VALIDATING INPUT FIELDS///////
@@ -43,7 +51,7 @@ exports.registerhouse= function(req,res){
         "Adres": house.Adres,
         "UserID": house.UserID
     }
-    console.log("We got newHouse values: "+ JSON.stringify(newHouse));
+ //   console.log("We got newHouse values: "+ JSON.stringify(newHouse));
 
 
 /////////////////////////////////
@@ -51,7 +59,7 @@ exports.registerhouse= function(req,res){
 /////////////////////////////////      
     connection.connection.query('INSERT INTO studentenhuis SET ?', newHouse, function(error,results,fields){
         if(error){
-            console.log("The following error occured: "+ error);
+         //   console.log("The following error occured: "+ error);
             res.send({
                 "code":400,
                 "failed":"error ocurred"
@@ -60,12 +68,28 @@ exports.registerhouse= function(req,res){
             connection.connection.end();
         } else {
 
+            connection.connection.query('SELECT * FROM studentenhuis ORDER BY ID DESC LIMIT 1 ', function(error,results,fields){
+            
+          
+            res.status(200);
             res.send({
-                "code":200,
-                "success":"StudentHouse registered sucessfully"
+                
+                    "id":results[0].ID,
+                    "naam": results[0].Naam,
+                    "adres": results[0].Adres,
+                    "contact": results[0].UserID,
+                    "email": "Jack@box.nl"
+                  
             });
             res.end();
             connection.connection.end();
+                
+                }
+            );
+
+
+            
+         
         }
     });
 }
@@ -173,7 +197,7 @@ exports.getSpecificHouse= function(req,res){
 ///RETURN JSON WITH 1 HOUSE/////////
 ////////////////////////////////////     
 
-                res.json(responsearray);
+                res.json(responsearray[0]);
                 res.end();
                 connection.connection.end();}
                 else{
@@ -216,8 +240,14 @@ exports.putHouse= function(req,res){
 /////////////////////////////////
 ///GETTING DATA FROM BODY////////
 /////////////////////////////////  
-
+try{
     var house = new Studentenhuis(req.body.Naam, req.body.Adres, ""+UserID); 
+}catch(Ex){
+    console.log(Ex.toString());
+    res.status(412).send({"message":"Missing paramters"}).end();
+    return;
+}
+
 
 /////////////////////////////////
 ///SPLITTING PATH FOR DATA///////
@@ -296,12 +326,14 @@ exports.putHouse= function(req,res){
 ///IF SUCCESFULL UPDATE//////////
 /////////////////////////////////                 
         } else {
-            res.send({
-                "code":200,
-                "success":"StudentHouse updated sucessfully"
-            });
+            res.status(200).send({
+                "ID": houseID,
+                "naam": house.Naam,
+                "adres": house.Adres,
+                "contact": UserID,
+                "email": "Email van user:  " + UserID
+            }).end();
             connection.end();
-            res.end();
             return;          
         }
     });
@@ -384,7 +416,7 @@ if(results.length === 1){
 ///IF SO, UPDATE THE RECORD/////////
 /////////////////////////////////////    
 
-    connection.connection.query('DELETE FROM studentenhuis WHERE ID = "' + houseID + '" AND UserID = "' + UserID + ';',  function(error,results,fields){
+    connection.connection.query('DELETE FROM studentenhuis WHERE ID = "' + houseID + '" AND UserID = "' + UserID + '";',  function(error,results,fields){
 //////////////////////////////////
 ///IF ERROR ON UPDATE 400/////////
 //////////////////////////////////     

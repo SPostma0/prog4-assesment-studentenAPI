@@ -11,6 +11,9 @@ exports.login = function(req,res){
     var Security = require('./../../Security');
     var User = require('./../../domain/User');
     var bcrypt = require('bcrypt');
+    const assert = require('assert')
+    const validator = require('validator');
+    const ApiError = require('./../../domain/ApiError');
 
 
 
@@ -19,7 +22,14 @@ exports.login = function(req,res){
 /////////////////////////////
     
 
-
+try{
+    assert(validator.isEmail(req.body.Email), 'email dit not pass validation');
+}catch(ex){
+    res.status(412).json({"message":ex.toString()}).end();
+    throw(new ApiError(412,ex.toString()));
+    return;
+}
+    
 
     var User ={
         "Email": req.body.Email,
@@ -39,11 +49,13 @@ exports.login = function(req,res){
 /////////////////////////////
     if (error) {
         console.log("/LOGIN/ Error occured" + error);
-        res.send({
-                    "code":400,
-                    "failed":"error ocurred"})
-        res.end();
-        connection.connection.end();
+        res.status((401)).res.send({
+                    "code":401,
+                    "failed":"error ocurred"}).res.end();
+        connection.end();
+        
+        throw(new ApiError(401, "erreur"));
+        return;
         }else{
 
 
@@ -51,36 +63,49 @@ exports.login = function(req,res){
 ////////IF LOGIN SUCCES//////
 /////////////////////////////
 
-        if(results.length === 1 && bcrypt.compareSync(User.Wachtwoord, results[0].Wachtwoord)){
-                console.log("Login succesfull")
+                        if(results.length === 1 && bcrypt.compareSync(User.Wachtwoord, results[0].Wachtwoord)){
+                                console.log("Login succesfull")
+                                user = {id: results[0].ID};
 
-                user = {id: results[0].ID};
 /////////////////////////////////
 //////SIGN TOKEN WITH USERID/////
 /////////////////////////////////          
-            const token =           jwt.sign({user}     , Security.secret);
+                        const token =           jwt.sign({user}     , Security.secret);
 
-            var returnToken =       { "token" : token}
+                        var returnToken =       { "token" : token}
 
 /////////////////////////////
 ////RETURN TOKEN TO CLIENT///
 /////////////////////////////                                   
-res.json(returnToken);
+                        res.status(200).json(returnToken).end();
+                        connection.end();
+                        return;
 
 
 /////////////////////////////
 ////////FALSE LOGIN DETAILS//
 /////////////////////////////
         }else{
+                if(results.length === 0){
+                        res.status(401).send({"Message":"Invalid Credentials"}).end();
+                        connection.end()
+                        return;
+                }
+                
+
+
             console.log("Login Not Succesfull")
-            res.send({message:"invalid credentials"})
+            res.status(412).send({"Message":"Invalid"}).end();
+            connection.end();
+           // throw(new ApiError(411, "Credentials invalid"))
+            return;
+            
         }
 
 /////////////////////////////////////
 //KILL CONNECTION TO DB & CLIENT/////
 /////////////////////////////////////       
-    res.end()
-    connection.end();
+
         }
     });
   }
