@@ -24,8 +24,8 @@ try{
 var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
 }catch(ex){
     console.log(ex.toString());
-    res.status(404).send({"message":"Missing paramters"}).end();
-    throw(new ApiError(404, "Wrong paramters: Naam: " + req.body.Naam+"  Adres: " + req.body.Adres + "  " + UserID));
+    res.status(412).send({"message":"Missing paramters"}).end();
+    throw(new ApiError(412, "Wrong paramters: Naam: " + req.body.Naam+"  Adres: " + req.body.Adres + "  " + UserID));
 
 }
     
@@ -68,21 +68,28 @@ var house = new Studentenhuis(req.body.Naam, req.body.Adres, UserID);
             connection.connection.end();
         } else {
 
-
-
+            connection.connection.query('SELECT * FROM studentenhuis ORDER BY ID DESC LIMIT 1 ', function(error,results,fields){
             
+          
             res.status(200);
             res.send({
                 
-                  
-                    "naam": newHouse.Naam,
-                    "adres": newHouse.Adres,
-                    "contact": newHouse.UserID,
+                    "id":results[0].ID,
+                    "naam": results[0].Naam,
+                    "adres": results[0].Adres,
+                    "contact": results[0].UserID,
                     "email": "Jack@box.nl"
                   
             });
             res.end();
             connection.connection.end();
+                
+                }
+            );
+
+
+            
+         
         }
     });
 }
@@ -409,7 +416,7 @@ if(results.length === 1){
 ///IF SO, UPDATE THE RECORD/////////
 /////////////////////////////////////    
 
-    connection.connection.query('DELETE FROM studentenhuis WHERE ID = "' + houseID + '" AND UserID = "' + UserID + ';',  function(error,results,fields){
+    connection.connection.query('DELETE FROM studentenhuis WHERE ID = "' + houseID + '" AND UserID = "' + UserID + '";',  function(error,results,fields){
 //////////////////////////////////
 ///IF ERROR ON UPDATE 400/////////
 //////////////////////////////////     

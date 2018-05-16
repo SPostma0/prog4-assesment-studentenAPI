@@ -23,11 +23,11 @@ let deleteID;
 describe('Studentenhuis POST', () => {
     it('Throw error on invalid token', (done) => {
         chai.request('localhost:3000')
-            .post('/api/protected/Routes/SecuredRoutes/Studenthuis')
+            .post('/api/protected/studentenhuis/')
             .set('Authorization', "eyJAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjcxNzYwMjUsImlhdCI6MTUyNjMxMjAyNX0.EQzuGFndkcLuBj7JQ1JNubmSPpmlE-YwTTpCW5rQgDQ")
             .send({
-                "naam": "string",
-                "adres": "help"
+                "Naam": "string",
+                "Adres": "help"
             })
             .end((err, res) => {
                 done()
@@ -39,20 +39,20 @@ describe('Studentenhuis POST', () => {
             .post('/api/protected/studentenhuis/')
             .set('Authorization', validToken)
             .send({
-                "naam": "string",
-                "adres": "help"
+                "Naam": "string",
+                "Adres": "help"
             })
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
 
-                const response = res.body.result[0];
-                response.should.have.property('id');
-                response.should.have.property('naam').and.equals("string");
-                response.should.have.property('adres').and.equals("help");
-                response.should.have.property('contact');
-                response.should.have.property('email');
-                deleteID = res.body.result.id;
+              
+                res.body.should.have.property('id');
+                res.body.should.have.property('naam').and.equals("string");
+                res.body.should.have.property('adres').and.equals("help");
+                res.body.should.have.property('contact');
+                res.body.should.have.property('email');
+                deleteID = res.body.id;
 
                 done()
             });
@@ -60,7 +60,7 @@ describe('Studentenhuis POST', () => {
 
     it('Throw error on missing name', (done) => {
         chai.request('localhost:3000')
-            .post('/api/protected/Routes/SecuredRoutes/Studenthuis')
+            .post('/api/protected/studentenhuis/')
             .send({
                 "adres": "help"
             })
@@ -212,7 +212,7 @@ describe('Studentenhuis PUT', () => {
 describe('Studentenhuis DELETE', () => {
     it('Throw error on invalid token', (done) => {
         chai.request('localhost:3000')
-            .delete('api/protected/studentenhuis')
+            .delete('/api/protected/studentenhuis')
             .set('Authorization', validToken)
             .send({
                 "Naam": "jjjjjjjjjjjj",
@@ -225,7 +225,7 @@ describe('Studentenhuis DELETE', () => {
 
     it('Delete studenthuis', (done) => {
         chai.request('localhost:3000')
-            .delete('api/protected/studentenhuis/' + deleteID)
+            .delete('/api/protected/studentenhuis/' + deleteID)
             .set('Authorization', validToken)
             .end((err, res) => {
                 res.should.have.status(200);
