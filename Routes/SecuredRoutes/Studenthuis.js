@@ -43,7 +43,7 @@ exports.registerhouse= function(req,res){
         "Adres": house.Adres,
         "UserID": house.UserID
     }
-    console.log("We got newHouse values: "+ JSON.stringify(newHouse));
+ //   console.log("We got newHouse values: "+ JSON.stringify(newHouse));
 
 
 /////////////////////////////////
@@ -51,7 +51,7 @@ exports.registerhouse= function(req,res){
 /////////////////////////////////      
     connection.connection.query('INSERT INTO studentenhuis SET ?', newHouse, function(error,results,fields){
         if(error){
-            console.log("The following error occured: "+ error);
+         //   console.log("The following error occured: "+ error);
             res.send({
                 "code":400,
                 "failed":"error ocurred"
