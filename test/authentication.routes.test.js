@@ -1,6 +1,4 @@
-/**
- * Testcases aimed at testing the authentication process.
- */
+
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
@@ -8,8 +6,6 @@ const server = require('../server');
 chai.should();
 chai.use(chaiHttp);
 
-// After successful registration we have a valid token. We export this token
-// for usage in other testcases that require login.
 let validToken;
 
 describe('Registration', () => {
@@ -91,12 +87,12 @@ describe('Registration', () => {
     });
 
     it('should throw an error when no lastname is provided', (done) => {
-        chai.request(server)
-            .post('/api/register')
+        chai.request('localhost:3000')
+            .post('/api/public/register')
             .send({
-                "firstname": "string",
-                "email": "string",
-                "password": "string"
+                "Voornaam": "string",
+                "Email": "string@sss.nl",
+                "Wachtwoord": "string"
             })
             .end((err, res) => {
                 res.should.have.status(412)
@@ -105,13 +101,13 @@ describe('Registration', () => {
     });
 
     it('should throw an error when lastname is shorter than 2 chars', (done) => {
-        chai.request(server)
-            .post('/api/register')
+        chai.request('localhost:3000')
+            .post('/api/public/register')
             .send({
-                "firstname": "string",
-                "lastname": "a",
-                "email": "bp@avans.nl",
-                "password": "string"
+                "Voornaam": "string",
+                "Achternaam": "a",
+                "Email": "bp@avans.nl",
+                "Wachtwoord": "string"
             })
             .end((err, res) => {
                 res.should.have.status(412)
@@ -120,12 +116,12 @@ describe('Registration', () => {
     });
 
     it('should throw an error when email is invalid', (done) => {
-        chai.request(server)
-            .post('/api/register')
+        chai.request('localhost:3000')
+            .post('/api/public/register')
             .send({
-                "firstname": "string",
-                "lastname": "a",
-                "password": "string"
+                "Voornaam": "string",
+                "Achternaam": "achmend",
+                "Wachtwoord": "string"
             })
             .end((err, res) => {
                 res.should.have.status(412)
@@ -138,11 +134,11 @@ describe('Registration', () => {
 describe('Login', () => {
 
     it('should return a token when providing valid information', (done) => {
-        chai.request(server)
-            .post('/api/login')
+        chai.request('localhost:3000')
+            .post('/api/public/login')
             .send({
-                "email": "bartpklomp@hotmail.com",
-                "password": "banaan"
+                "Email": "Jack@box.nl",
+                "Wachtwoord": "Wachtwoord"
             })
             .end((err, res) => {
                 res.should.have.status(200);
@@ -156,14 +152,12 @@ describe('Login', () => {
             });
     });
     it('should throw an error when email does not exist', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
-        chai.request(server)
-            .post('/api/login')
+
+        chai.request('localhost:3000')
+            .post('/api/public/login')
             .send({
-                "email": "ghdfsa@email.com",
-                "password": "string"
+                "Email": "bestaatniet@email.com",
+                "Wachtwoord": "string"
             })
             .end((err, res) => {
                 res.should.have.status(401)
@@ -173,14 +167,12 @@ describe('Login', () => {
     });
 
     it('should throw an error when email exists but password is invalid', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
-        chai.request(server)
-            .post('/api/login')
+
+        chai.request('localhost:3000')
+            .post('/api/public/login')
             .send({
-                "email": "bartpklomp@gmail.com",
-                "password": "thegsadffff"
+                "Email": "Jack@box.nl",
+                "Wachtwoord": "thepassword"
             })
             .end((err, res) => {
                 res.should.have.status(412)
@@ -189,11 +181,11 @@ describe('Login', () => {
     });
 
     it('should throw an error when using an invalid email', (done) => {
-        chai.request(server)
-            .post('/api/login')
+        chai.request('localhost:3000')
+            .post('/api/public/login')
             .send({
-                "email": "asdasd",
-                "password": "banaan"
+                "email": "invaliddd",
+                "password": "box"
             })
             .end((err, res) => {
                 res.should.have.status(412)

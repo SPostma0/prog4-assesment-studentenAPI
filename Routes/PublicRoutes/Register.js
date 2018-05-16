@@ -15,15 +15,17 @@
 //////////////////////////////////
 //////CREATING USER FROM BODY/////
 //////////////////////////////////
-        if(req.body.Voornaam == null ||req.body.Achternaam == null ||req.body.Wachtwoord == null ||req.body.Email == null){
-            console.log('throwing error')
-            throw(new ApiError(412, "Missing parameters"));
-            res.status(412).send({"Message":"Missing paramters"}).end();
-            return;
-        }
+     
 
-
+try{
+    
     var user = new User(req.body.Voornaam, req.body.Achternaam, req.body.Email, req.body.Wachtwoord);
+}catch(ex){
+    res.status(412).send({"message":ex.toString()}).end();    
+    throw(new ApiError(412, ex.toString()))
+    return;
+}
+    
 
 ///////////////////////////////////
 ////CREATING SET FOR DB INSERT/////  NOT ACTUALLY REQUIRED. BUT WOULD ALLOW FOR EASY LOCALIZED ASSERTION OF ERRORS.
@@ -35,11 +37,12 @@
         "Email": user.Email,
         "Wachtwoord": user.Wachtwoord 
     }
-    console.log("Got user from body: " + JSON.stringify(newUser));
+
 
 /////////////////////////////
 ////FIRE QUERY AT DATABA/////
 /////////////////////////////
+
     connection.connection.query('INSERT INTO user SET ?', newUser, function (error, results, fields) {
 
 //////////////////////////////////////

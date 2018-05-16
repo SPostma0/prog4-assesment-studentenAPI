@@ -18,7 +18,9 @@ exports.user = class User {
 
 
         assert(typeof (Voornaam) === 'string', 'Naam must be a string');
+        assert(typeof (Voornaam) != null, 'Voornaam is not null.');
         assert(typeof (Achternaam) === 'string', 'Achternaam must be a string');
+        assert(typeof (Achternaam) != null, 'achternaam is not null.');
         assert(typeof (Email) === 'string', 'Email must be a string');
         assert(typeof (Wachtwoord) === 'string', 'Wachtwoord must be an array');
         assert(Email.trim().length > 5, 'Email should be atleast 6 chars');
@@ -27,8 +29,6 @@ exports.user = class User {
         assert(validator.isEmail(Email), 'email dit not pass validation');
 
 
-        console.log(this.Wachtwoord);
-
         this.Voornaam = Voornaam;
         this.Achternaam = Achternaam;
         this.Email = Email;
@@ -36,8 +36,6 @@ exports.user = class User {
         
     }
  
-
-    
 }
  
 
